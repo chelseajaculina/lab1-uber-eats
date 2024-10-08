@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+</head>
+<body>
+    <h2>Your Cart</h2>
+    <ul>
+        {% for item in cart_items %}
+            <li>{{ item.dish.name }} - {{ item.quantity }} - ${{ item.dish.price }}</li>
+        {% empty %}
+            <li>Your cart is empty.</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Total: ${{ total_price }}</h3>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Place Order</button>
+    </form>
+</body>
+</html>

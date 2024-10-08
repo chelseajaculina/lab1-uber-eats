@@ -1,0 +1,193 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Uber Eats</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
+    <style>
+        /* Optional: Adjust widths to maintain a one-row layout */
+        .search-bar {
+            width: 200px;
+        }
+        .nav-item {
+            white-space: nowrap;
+        }
+        .right-section a {
+            white-space: nowrap;
+        }
+
+        /* Sidebar styling */
+        .offcanvas-start {
+            width: 280px; /* Set the width of the offcanvas sidebar */
+        }
+
+        .btn-toggle-nav a {
+            text-decoration: none;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid d-flex flex-nowrap">
+            <!-- Hamburger Menu Trigger -->
+            <button class="btn btn-outline-secondary me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasSidebar">
+                &#9776; <!-- This is the hamburger icon -->
+            </button>
+
+            <!-- Brand Name -->
+            <a class="navbar-brand" href="#">Uber <span class="logo-green">Eats</span></a>
+
+            <!-- Navigation Links -->
+            <div class="d-flex flex-grow-1 justify-content-center">
+                <ul class="navbar-nav flex-row">
+                    <li class="nav-item me-3">
+                        <a class="nav-link" href="#">Delivery</a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link" href="#">Pickup</a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link" href="#">San Jose State University</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Search Bar and Authentication Links -->
+            <div class="d-flex align-items-center right-section">
+                <!-- Search Bar -->
+                <form class="d-flex me-3">
+                    <input class="form-control search-bar" type="search" placeholder="Search Uber Eats" aria-label="Search">
+                    <button class="btn btn-outline-success ms-2" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <style>
+        .profile-section {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .profile-section img {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .profile-section .username {
+            font-weight: bold;
+        }
+
+        .list-group-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .list-group-item svg {
+            margin-right: 10px;
+        }
+
+        .list-group-item a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .promo-text {
+            color: orange;
+            font-size: 0.9rem;
+        }
+
+        .app-links img {
+            margin-right: 5px;
+        }
+
+        .app-links a {
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Offcanvas Trigger Button -->
+
+    <!-- Offcanvas Sidebar Menu -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <!-- Profile Section -->
+            <div class="profile-section">
+                <img src="https://via.placeholder.com/50" alt="Profile Picture">
+                <div>
+                    <div class="username">{{ request.user.username }}</div>
+                    <a href="{%url 'profile' %}" class="text-success">Manage account</a>
+                </div>
+            </div>
+            <hr>
+            <!-- Menu Items -->
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
+                        <path d="M8 1a2 2 0 0 0-2 2v1H4v1h8V4h-2V3a2 2 0 0 0-2-2zm1 2V3a1 1 0 0 0-2 0v1h2zM3 5v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5H3zm2 0h6v9H5V5z"/>
+                    </svg>
+                    <a href="#">Orders</a>
+                </li>
+                <li class="list-group-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                        <path d="M8 15S3 12 3 7.5 5.5 4 8 4s5 3.5 5 7.5S8 15 8 15zm0-1s3-2.5 3-6S9 5 8 5s-3 1.5-3 4 3 6 3 6z"/>
+                    </svg>
+                    <a href="#">Favorites</a>
+                </li>
+                <li class="list-group-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet" viewBox="0 0 16 16">
+                        <path d="M0 3a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3zm2-1a1 1 0 0 0-1 1v2h12V3a1 1 0 0 0-1-1H2zm12 4H1v7a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V6z"/>
+                    </svg>
+                    <a href="#">Wallet</a>
+                </li>
+                <li class="list-group-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
+                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 1 0V1zm11 4H2v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V4z"/>
+                    </svg>
+                    <a href="#">Meal plan</a>
+                </li>
+                <!-- Add more items as needed -->
+            </ul>
+            <hr>
+            <!-- Promotions -->
+            <p class="promo-text">Try Uber One free for 4 weeks</p>
+            <!-- Sign out -->
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <form method="POST" action="{% url 'signout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-light btn-block w-100">Sign Out</button>
+                </li>
+            </ul>
+            <hr>
+            <!-- App Links -->
+            <div class="app-links">
+                <p>There's more to love in the app.</p>
+                <a href="#"><img src="https://via.placeholder.com/20" alt="iPhone"> iPhone</a>
+                <a href="#"><img src="https://via.placeholder.com/20" alt="Android"> Android</a>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

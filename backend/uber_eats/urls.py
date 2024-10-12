@@ -28,4 +28,5 @@ urlpatterns = [
     path('signin/', auth_views.LoginView.as_view(template_name='customer/signin.html'), name='signin'),
     path('signout/', auth_views.LogoutView.as_view(template_name='customer/signout.html'), name='signout'),
     path('', include('customers.urls')),  # Include URLs from the customer app
+    path('restaurant/', include('restaurants.urls')), # Include URLs from the restaurant app
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

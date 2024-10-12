@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'customers', # Step 1: Update Installed Apps: In uber_eats/settings.py, add the customer app to the INSTALLED_APPS list:
     'rest_framework',
+    'restaurants',
     'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -120,7 +121,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'customers/static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'customers/static'), os.path.join(BASE_DIR, 'restaurants/static')]
 
 
 # Default primary key field type

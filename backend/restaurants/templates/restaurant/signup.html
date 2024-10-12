@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uber Eats - Restaurant Sign Up</title>
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+</head>
+<body>
+    <div class="signup-container">
+        <form method="POST" class="signup-form">
+            {% csrf_token %}
+            <h1 class="title">Sign up to deliver with Uber Eats</h1>
+
+            <input type="text" name="name" placeholder="Restaurant Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="text" name="location" placeholder="Location" required>
+
+            <button type="submit" class="signup-btn">Sign Up</button>
+        </form>
+    </div>
+</body>
+</html>

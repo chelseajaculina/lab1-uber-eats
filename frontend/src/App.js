@@ -1,5 +1,7 @@
+import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import RestaurantSignup from './RestaurantSignup'; // Import the RestaurantSignup component
 
 function App() {
   return (
@@ -18,6 +20,9 @@ function App() {
           Learn React
         </a>
       </header>
+      <main>
+        <RestaurantSignup /> {/* Add the RestaurantSignup component here */}
+      </main>
     </div>
   );
 }

@@ -37,6 +37,7 @@ const Login = () => {
 
     return (
         <form onSubmit={handleSubmit}>
+            <h1>Login</h1>
             <input type="text" name="username" onChange={handleChange} placeholder="Username" required />
             <input type="password" name="password" onChange={handleChange} placeholder="Password" required />
             <button type="submit">Login</button>

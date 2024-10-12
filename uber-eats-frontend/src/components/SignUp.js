@@ -30,6 +30,7 @@ const SignUp = () => {
 
     return (
         <form onSubmit={handleSubmit}>
+            <h1>Sign Up</h1>
             <input type="text" name="username" onChange={handleChange} placeholder="Username" required />
             <input type="text" name="name" onChange={handleChange} placeholder="Full Name" required />
             <input type="email" name="email" onChange={handleChange} placeholder="Email" required />

@@ -1,12 +1,12 @@
 // Home.js
 import React from 'react';
 import Logout from './Logout';
+import UserDashboard from './UserDashboard';
 
 const Home = () => {
     return (
         <div>
-            <h1>Welcome to the Home Page!</h1>
-
+            <center><><UserDashboard/></></center>
             <center><><Logout/></></center>
         </div>
     );

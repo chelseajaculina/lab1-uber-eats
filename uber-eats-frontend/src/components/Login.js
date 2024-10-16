@@ -1,4 +1,3 @@
-// src/Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -20,6 +19,7 @@ const Login = () => {
 
         if (localStorage.getItem('access_token')) {
             alert('You are already logged in!');
+            navigate('/home');  // Redirect to the Home page
             return;
         }
 

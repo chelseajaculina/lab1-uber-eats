@@ -17,13 +17,10 @@ class CustomerSerializer(serializers.ModelSerializer):
         return '/static/images/default_profile_picture.png'  # Default image path
 
     def validate_profile_picture(self, value):
-        if not value:
-            return None
-        if not isinstance(value, File):
-            # If the value is not a file, allow the request to proceed
-            return value
-        # If the value is a file, validate it as usual
-        return super().validate_profile_picture(value)
+        # Check that the file is an image, if needed
+        if not value.content_type.startswith('image'):
+            raise serializers.ValidationError("Uploaded file is not an image.")
+        return value
 
 class CustomerSignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -38,6 +35,11 @@ class CustomerSignUpSerializer(serializers.ModelSerializer):
         customer.set_password(password)
         customer.save()
         return customer
+    
+    def validate_profile_picture(self, value):
+        # Example of incorrect usage that could cause your error
+        value = super().validate_profile_picture(value)  # THIS is incorrect
+        return value
     
 # customers/serializers.py
 class LogoutSerializer(serializers.Serializer):

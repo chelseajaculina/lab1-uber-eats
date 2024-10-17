@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import permissions, status
 
+# api view for signup 
 class CustomerSignUpView(generics.CreateAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSignUpSerializer
@@ -46,7 +47,7 @@ class CustomLoginView(TokenObtainPairView):
                 _, _ = BlacklistedToken.objects.get_or_create(token=token)
             except Exception as e:
                 pass
-        
+
         response = super().post(request, *args, **kwargs)
         # Add message indicating successful login
         response.data['message'] = 'You are now logged in successfully.'
@@ -64,28 +65,51 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+# update customer data
 class CustomerProfileView(APIView):
-    def post(self, request):
-        return self._handle_request(request)
+    serializer_class = CustomerSerializer
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]  # Ensure the view can handle multipart form data
+
+    # def post(self, request):
+    #     serializer = CustomerSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     else:
+    #         # Customize error messages for clarity
+    #         errors = serializer.errors
+    #         if 'username' in errors:
+    #             errors['username'] = ["This username is already in use."]
+    #         if 'email' in errors:
+    #             errors['email'] = ["This email is already in use."]
+    #         print(f"Serializer errors on POST: {errors}")  # Debugging
+    #         return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
     def patch(self, request):
-        return self._handle_request(request)
-
-    def _handle_request(self, request):
         try:
-            logger.info(f"Received request data: {request.data}")
+            # Check that the request user is authenticated
+            if not request.user.is_authenticated:
+                return Response({'error': 'User is not authenticated.'}, status=status.HTTP_403_FORBIDDEN)
+
+            print(f"Request data: {request.data}")  # Debugging: See what data is received by the server
+
+            # Fetch the customer instance
             customer = Customer.objects.get(pk=request.user.pk)
+
+            # Serialize and validate data
             serializer = CustomerSerializer(customer, data=request.data, partial=True)
             if serializer.is_valid():
-                logger.info(f"Serializer is valid: {serializer.validated_data}")
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
-                logger.error(f"Serializer is not valid: {serializer.errors}")
+                print(f"Serializer errors: {serializer.errors}")  # Debugging
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Customer.DoesNotExist:
+            return Response({'error': 'Customer not found.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger.error(f"Error handling request: {str(e)}")
-            return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+            print(f"Error: {str(e)}")  # Debugging
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 from django.http import JsonResponse
 from rest_framework.decorators import permission_classes
@@ -109,7 +133,7 @@ from rest_framework.decorators import permission_classes
 
 #         request.user.profile_picture = file
 #         request.user.save()
-        
+
 #         return Response({'profilePicture': request.user.profile_picture.url})
 
 from rest_framework import permissions, status
@@ -152,7 +176,7 @@ class GetCustomerDataView(generics.RetrieveAPIView):
         serializer = CustomerSerializer(customer)
         return Response(serializer.data)
 
-    
+
 class GetProfilePictureView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -166,7 +190,7 @@ class GetProfilePictureView(APIView):
             return Response({'error': 'No profile picture found'}, status=status.HTTP_404_NOT_FOUND)
 
         return Response({'profilePicture': profile_picture_url}, status=status.HTTP_200_OK)
-    
+
 
 # views.py
 from rest_framework.views import APIView
@@ -181,3 +205,23 @@ class UserProfileView(APIView):
         customer = request.user  # Assumes the user is authenticated
         serializer = CustomerSerializer(customer)
         return Response(serializer.data)
+    
+
+from rest_framework import permissions, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
+from .models import Customer
+from .serializers import CustomerSerializer
+
+class UpdateProfileView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def patch(self, request, *args, **kwargs):
+        user = request.user
+        serializer = CustomerSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

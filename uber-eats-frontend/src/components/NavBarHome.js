@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './NavBar.css';
 import axios from 'axios';
 import {
-    FaBars, FaSearch, FaMapMarkerAlt, FaShoppingCart,
+    FaBars, FaMapMarkerAlt, FaShoppingCart,
     FaRegBookmark, FaWallet, FaUtensils, FaLifeRing, FaCar, FaGift
 } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
@@ -13,7 +13,8 @@ const NavBarHome = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState('San Jose State University');
     const [name, setName] = useState('');
-    const [profilePic, setProfilePic] = useState('/images/user-profile.jpg');
+    const [city, setCity] = useState('');
+    const [profilePicture, setProfilePic] = useState('localStorage.getItem("profilePicture") || ""');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -36,6 +37,12 @@ const NavBarHome = () => {
                     });
                     console.log('Fetched data:', response.data);
                     setName(response.data.name);
+                    setCity(response.data.city);
+                    if (response.data.profile_picture) {
+                        const profilePictureUrl = response.data.profile_picture;
+                        setProfilePic(profilePictureUrl);
+                        localStorage.setItem('profilePicture', profilePictureUrl); // Persist in localStorage
+                    }
                 } catch (error) {
                     console.error('Error fetching user data:', error.response ? error.response.data : error.message);
                 }
@@ -43,6 +50,8 @@ const NavBarHome = () => {
             fetchUserData();
         }
     }, []);
+
+    
 
     return (
         <>
@@ -105,8 +114,11 @@ const NavBarHome = () => {
                     {isLoggedIn ? (
                         // Menu for logged-in users
                         <div className="user-info">
-                            <img src={profilePic} alt="User Profile" className="user-profile-pic" />
+                            {/* <img src={this.state.previewProfilePicture} alt="Current Profile" className="profile-picture" /> */}
+
+                            <img src={profilePicture} alt="User Profile" className="user-profile-pic" />
                             <h3>Welcome, {name || "Guest"}</h3>
+                            <h3>Welcome, {city || "Guest"}</h3>
                             <Link to="/userdashboard" className="manage-account-link">Manage account</Link>
                             <div className="side-links">
                                 <Link to="/orders" onClick={toggleMenu}><FaRegBookmark /> Orders</Link>

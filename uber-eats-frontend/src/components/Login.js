@@ -36,12 +36,37 @@ const Login = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h1>Login</h1>
-            <input type="text" name="username" onChange={handleChange} placeholder="Username" required />
-            <input type="password" name="password" onChange={handleChange} placeholder="Password" required />
-            <button type="submit">Login</button>
-        </form>
+        
+        <div className="login-container">
+            <div className="login-header">
+                <h1 className="brand-title"> <span> Uber Eats</span></h1>
+            </div>
+            <form onSubmit={handleSubmit} className="login-form">
+                <h1>Login</h1>
+                <input type="text" name="username" onChange={handleChange} placeholder="Username" required />
+                <input type="password" name="password" onChange={handleChange} placeholder="Password" required />
+                <button type="submit" className="continue-button">Login</button>
+
+                <div className="divider">
+                    <hr className="line" /> <span>or</span> <hr className="line" />
+                </div>
+                <button className="google-button" type="button">
+                    <img src="/images/google-icon.png" alt="Google Icon" /> Continue with Google
+                </button>
+                <button className="apple-button" type="button">
+                    <img src="/images/apple-icon.png" alt="Apple Icon" /> Continue with Apple
+                </button>
+                <div className="divider">
+                    <hr className="line" /> <span>or</span> <hr className="line" />
+                </div>
+                <button className="qr-code-button" type="button">
+                    <img src="/images/qr-icon.png" alt="QR Icon" /> Log in with QR code
+                </button>
+                <p className="disclaimer">
+                    By proceeding, you consent to get calls, WhatsApp, or SMS/RCS messages, including by automated dialer, from Uber and its affiliates to the number provided. Text "STOP" to 89203 to opt out.
+                </p>
+            </form>
+        </div>
     );
 };
 

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CustomerSignUpView, LogoutView, CustomerProfileView, UploadProfilePictureView, GetCustomerDataView
+from .views import UserProfileView, CustomerSignUpView, LogoutView, CustomerProfileView, UploadProfilePictureView, GetCustomerDataView, GetProfilePictureView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
@@ -10,4 +10,6 @@ urlpatterns = [
     path('update/', CustomerProfileView.as_view(), name='customer-update'),
     path('upload-profile-picture/', UploadProfilePictureView.as_view(), name='upload-profile-picture'),
     path('me/', GetCustomerDataView.as_view(), name='customer-profile'),
+    path('profile-picture/', GetProfilePictureView.as_view(), name='get-profile-picture'),
+    path('api/user-profile/', UserProfileView.as_view(), name='user-profile'),
 ]

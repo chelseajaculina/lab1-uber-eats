@@ -1,7 +1,8 @@
 import './Landing.css';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import { AiOutlineClockCircle } from 'react-icons/ai';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
 const Landing = () => {
@@ -15,11 +16,9 @@ const Landing = () => {
         setIsLoggedIn(!!token);
     }, []);
 
-    // Function to toggle side menu visibility (only if logged in)
+    // Function to toggle side menu visibility
     const toggleMenu = () => {
-        if (isLoggedIn) {
-            setIsMenuOpen(!isMenuOpen);
-        }
+        setIsMenuOpen(!isMenuOpen);
     };
 
     const handleLoginClick = () => {
@@ -70,22 +69,35 @@ const Landing = () => {
                 )}
             </header>
 
-            {/* Side Menu (only shows if logged in) */}
-            {isMenuOpen && isLoggedIn && (
+            {/* Side Menu for Hamburger */}
+            {isMenuOpen && (
                 <div className="side-menu">
                     <button className="close-button" onClick={toggleMenu}>✖</button>
-                    <h3>Welcome back!</h3>
-                    <div className="side-links">
-                        <Link to="/orders">Your Orders</Link>
-                        <Link to="/account">Account Settings</Link>
-                        <Link to="/help">Help</Link>
-                    </div>
-                    <button className="logout-button" onClick={() => {
-                        localStorage.removeItem('authToken');
-                        setIsLoggedIn(false);
-                        toggleMenu(); // Close the side menu after logging out
-                    }}>Log out</button>
-                    
+                    {!isLoggedIn ? (
+                        <>
+                            <button className="signup-side-button" onClick={() => navigate('/signup')}>Sign up</button>
+                            <button className="login-side-button" onClick={() => navigate('/login')}>Log in</button>
+                            <div className="side-links">
+                                <Link to="/business-account">Create a business account</Link>
+                                <Link to="/add-restaurant">Add your restaurant</Link>
+                                <Link to="/signup-to-deliver">Sign up to deliver</Link>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <h3>Welcome back!</h3>
+                            <div className="side-links">
+                                <Link to="/orders">Your Orders</Link>
+                                <Link to="/account">Account Settings</Link>
+                                <Link to="/help">Help</Link>
+                            </div>
+                            <button className="logout-button" onClick={() => {
+                                localStorage.removeItem('authToken');
+                                setIsLoggedIn(false);
+                                toggleMenu(); // Close the side menu after logging out
+                            }}>Log out</button>
+                        </>
+                    )}
                     <div className="download-app">
                         <img src="/images/uber-eats-logo.png" alt="Uber Eats" />
                         <p>There's more to love in the app.</p>

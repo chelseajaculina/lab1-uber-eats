@@ -4,11 +4,10 @@ import Home from './components/Home';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
 import Logout from './components/Logout';
-import MainLogin from './components/MainLogin';
 import UserDashboard from './components/UserDashboard';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import Navbar from './components/Navbar';
-import Landing from './components/Landing';
+import Welcome from './components/Welcome';
+
 
 
 const App = () => {
@@ -25,16 +24,15 @@ const App = () => {
 
     return (
         <Router>
-            {/* <Navbar/> */}
             <MainLayout>
                 <Routes>
-                    <Route path="/" element={<Landing/>} />
+                    <Route path="/" element={<Welcome/>} />
                     <Route path="/home" element= {<Home />} /> 
                     <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/logout" element={<Logout/>} />
-                    <Route path="/landing" element={<Landing />} />
-                    <Route path="/userdashboard" element={isAuthenticated ? <UserDashboard /> : <Navigate to="/login" />} />
+                    <Route path="/welcome" element={<Welcome />} />
+                    <Route path="/userdashboard" element={isAuthenticated ? <UserDashboard /> : <Navigate to="/userdashboard" />} />
                     {/* Add other routes here */}
                 </Routes>
             </MainLayout>

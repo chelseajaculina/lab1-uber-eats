@@ -56,9 +56,6 @@ from rest_framework import generics, permissions
 from .models import Customer
 from .serializers import CustomerSerializer
 
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import status
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -150,5 +147,37 @@ class GetCustomerDataView(generics.RetrieveAPIView):
     serializer_class = CustomerSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_object(self):
-        return self.request.user
+    def get(self, request):
+        customer = request.user  # Assumes the user is authenticated
+        serializer = CustomerSerializer(customer)
+        return Response(serializer.data)
+
+    
+class GetProfilePictureView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response({'error': 'User not authenticated'}, status=status.HTTP_403_FORBIDDEN)
+
+        profile_picture_url = request.user.profile_picture.url if request.user.profile_picture else None
+
+        if not profile_picture_url:
+            return Response({'error': 'No profile picture found'}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({'profilePicture': profile_picture_url}, status=status.HTTP_200_OK)
+    
+
+# views.py
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from .serializers import CustomerSerializer
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        customer = request.user  # Assumes the user is authenticated
+        serializer = CustomerSerializer(customer)
+        return Response(serializer.data)

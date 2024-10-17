@@ -1,76 +1,125 @@
-/* src/components/Login.css */
-body {
-    font-family: "Lato", sans-serif;
+
+/* Login container styling */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
+    max-height: 100vh; /* Limit height to avoid overflow */
+    overflow-y: auto; /* Allows internal scrolling if content overflows */
+    box-sizing: border-box;
 }
 
-
-
-.main-head{
-    height: 150px;
-    background: #FFF;
-   
+/* Adjust the form's margins and spacing to fit within the container */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto; /* Centers form within container */
+    box-sizing: border-box;
 }
 
-.sidenav {
-    height: 100%;
-    background-color: #000;
-    overflow-x: hidden;
-    padding-top: 20px;
+.login-header {
+    background-color: transparent;
+    width: 100%;
+    text-align: left;
+    padding: 10px;
 }
 
-
-.main {
-    padding: 0px 10px;
+.brand-title {
+    color: white;
+    font-size: 24px;
 }
 
-@media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
+.brand-title span {
+    color: #34a853; /* Green color for "Eats" */
+}
+.login-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    margin-top: 20px;
+}
+.login-form h2 {
+    text-align: left;
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+    text-align: center;
 }
 
-@media screen and (max-width: 450px) {
-    .login-form{
-        margin-top: 10%;
-    }
-
-    .register-form{
-        margin-top: 10%;
-    }
+.login-form input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
 }
 
-@media screen and (min-width: 768px){
-    .main{
-        margin-left: 40%; 
-    }
-
-    .sidenav{
-        width: 40%;
-        position: fixed;
-        z-index: 1;
-        top: 0;
-        left: 0;
-    }
-
-    .login-form{
-        margin-top: 20%;
-    }
-
-    .register-form{
-        margin-top: 20%;
-    }
+.continue-button {
+    background-color: black;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
 }
 
-
-.login-main-text{
-    margin-top: 20%;
-    padding: 60px;
-    color: #fff;
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
 }
 
-.login-main-text h2{
-    font-weight: 300;
+.line {
+    flex: 1;
+    height: 1px;
+    background-color: #ccc;
+    border: none;
 }
 
-.btn-black{
-    background-color: #000 !important;
+.google-button, .apple-button, .qr-code-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
+    color: black;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.google-button img, .apple-button img, .qr-code-button img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.disclaimer {
+    font-size: 12px;
+    color: gray;
+    text-align: center;
+    margin-top: 10px;
+    line-height: 1.5;
+}
+
+.link-button {
+    color: #000;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    background: #000;  /* Remove default background */
+    border: none;      /* Remove default border */
+    padding: 0.5rem;   /* Optional padding to make it look button-like */
     color: #fff;
 }

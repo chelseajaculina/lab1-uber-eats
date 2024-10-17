@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import './UserDashboard.css';
+import { Link } from 'react-router-dom';
 
 const UserDashboard = () => {
     // Initialize user state with localStorage to persist profile picture across sessions
@@ -171,7 +172,7 @@ const UserDashboard = () => {
         <div className="dashboard-container">
             {/* Sidebar */}
             <aside className="sidebar">
-                <h2>Uber Account</h2>
+               <Link to = "/home"><h2>Uber Account</h2> </Link>
                 <ul>
                     <li className="active">Account Info</li>
                     <li>Security</li>

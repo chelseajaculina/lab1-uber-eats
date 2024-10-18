@@ -9,7 +9,7 @@ class UserDashboard extends Component {
         this.state = {
             user: {
                 name: '',
-                dateOfBirth: '',
+                date_of_birth: '',
                 city: '',
                 state: '',
                 country: '',
@@ -106,24 +106,53 @@ class UserDashboard extends Component {
         } else {
             console.error("No file selected");
         }
-    };
     
+        
+        const { name, value } = e.target;
+
+        if (name === "dateOfBirth") {
+            // Regular expression to validate the format YYYY-MM-DD
+            const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+            if (value === '' || dateRegex.test(value)) {
+                // Update state only if value is empty or matches the YYYY-MM-DD format
+                this.setState(prevState => ({
+                    user: {
+                        ...prevState.user,
+                        [name]: value
+                    }
+                }));
+            } else {
+                console.warn("Please enter the date in the format YYYY-MM-DD.");
+            }
+        } else {
+            this.setState(prevState => ({
+                user: {
+                    ...prevState.user,
+                    [name]: value
+                }
+            }));
+        }
+
+    };
     handleSubmit = async (e) => {
         e.preventDefault();
     
         const formData = new FormData();
+    
+        // Append all user fields except profile picture to formData
         Object.keys(this.state.user).forEach(key => {
-            if (this.state.user[key]) formData.append(key, this.state.user[key]);
+            if (key !== 'profilePicture' && this.state.user[key]) {
+                formData.append(key, this.state.user[key]);
+            }
         });
     
-        // Ensure the file is added as 'profile_picture' only if it's a valid file
+        // Append profile picture only if it has been changed
         if (this.state.selectedProfilePicture instanceof File) {
             formData.append('profile_picture', this.state.selectedProfilePicture);
-        } else {
-            console.error("Profile picture is not a file:", this.state.selectedProfilePicture);
         }
     
         try {
+            // Send the patch request to update the user profile
             const response = await axios.patch('http://localhost:8000/api/customers/update/', formData, {
                 headers: {
                     Authorization: `Bearer ${this.state.authToken}`,
@@ -131,17 +160,31 @@ class UserDashboard extends Component {
                 }
             });
     
+            // Update state if profile picture is changed
             if (response.data.profile_picture) {
                 const updatedProfilePicture = `${this.mediaBaseURL}${response.data.profile_picture}?timestamp=${new Date().getTime()}`;
-                // Only update localStorage if the new picture URL is different
-                if (updatedProfilePicture !== localStorage.getItem('profilePicture')) {
-                    localStorage.setItem('profilePicture', updatedProfilePicture);
-                }
+                localStorage.setItem('profilePicture', updatedProfilePicture);
                 this.setState({
                     user: { ...this.state.user, profilePicture: updatedProfilePicture },
                     previewProfilePicture: updatedProfilePicture
                 });
             }
+    
+            // Update the rest of the user fields in the state
+            this.setState(prevState => ({
+                user: {
+                    ...prevState.user,
+                    name: response.data.name,
+                    date_of_birth: response.data.date_of_birth,
+                    city: response.data.city,
+                    state: response.data.state,
+                    country: response.data.country,
+                    nickname: response.data.nickname,
+                    email: response.data.email,
+                    phone: response.data.phone,
+                    favorites: response.data.favorites || [],
+                }
+            }));
     
             alert('Profile updated successfully');
         } catch (error) {
@@ -150,6 +193,7 @@ class UserDashboard extends Component {
         }
     };
     
+
     render() {
         return (
             <div className="dashboard-container">
@@ -176,7 +220,7 @@ class UserDashboard extends Component {
                             <p>No profile picture available.</p>
                         )}
                         
-                       
+                        <label>Change:</label><br />
                         <input
                             type="file"
                             className="profile-picture-input"
@@ -196,7 +240,7 @@ class UserDashboard extends Component {
                         </div>
                         <div>
                             <label>Date of Birth:</label>
-                            <input type="date" name="dateOfBirth" value={this.state.user.dateOfBirth || ''} onChange={this.handleInputChange} />
+                            <input type="text" name="date_of_birth" value={this.state.user.date_of_birth || ''} onChange={this.handleInputChange} placeholder="YYYY-MM-DD"/>
                         </div>
                         <div>
                             <label>City:</label>

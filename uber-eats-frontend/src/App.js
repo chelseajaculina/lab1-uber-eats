@@ -7,6 +7,7 @@ import Logout from './components/Logout';
 import UserDashboard from './components/UserDashboard';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Welcome from './components/Welcome';
+import RestaurantTab from './components/RestaurantTab';
 
 
 
@@ -33,6 +34,7 @@ const App = () => {
                     <Route path="/logout" element={<Logout/>} />
                     <Route path="/welcome" element={<Welcome />} />
                     <Route path="/userdashboard" element={isAuthenticated ? <UserDashboard /> : <Navigate to="/userdashboard" />} />
+                    <Route path="/restauranttab" element={<RestaurantTab />} />
                     {/* Add other routes here */}
                 </Routes>
             </MainLayout>

@@ -71,21 +71,6 @@ class CustomerProfileView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]  # Ensure the view can handle multipart form data
 
-    # def post(self, request):
-    #     serializer = CustomerSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #     else:
-    #         # Customize error messages for clarity
-    #         errors = serializer.errors
-    #         if 'username' in errors:
-    #             errors['username'] = ["This username is already in use."]
-    #         if 'email' in errors:
-    #             errors['email'] = ["This email is already in use."]
-    #         print(f"Serializer errors on POST: {errors}")  # Debugging
-    #         return Response(errors, status=status.HTTP_400_BAD_REQUEST)
-
     def patch(self, request):
         try:
             # Check that the request user is authenticated
@@ -114,27 +99,7 @@ class CustomerProfileView(APIView):
 from django.http import JsonResponse
 from rest_framework.decorators import permission_classes
 
-# @permission_classes([IsAuthenticated])
-# class UploadProfilePictureView(APIView):
-#     parser_classes = [MultiPartParser, FormParser]
-#     permission_classes = [permissions.IsAuthenticated]
 
-#     def post(self, request, *args, **kwargs):
-#         # Debugging: Check user and headers
-#         print(f"User: {request.user}, Authenticated: {request.user.is_authenticated}")
-#         print(f"Headers: {request.headers}")
-
-#         if not request.user.is_authenticated:
-#             return Response({'error': 'User not authenticated'}, status=status.HTTP_403_FORBIDDEN)
-
-#         file = request.data.get('profile_picture')
-#         if not file:
-#             return Response({'error': 'No file provided'}, status=status.HTTP_400_BAD_REQUEST)
-
-#         request.user.profile_picture = file
-#         request.user.save()
-
-#         return Response({'profilePicture': request.user.profile_picture.url})
 
 from rest_framework import permissions, status
 from rest_framework.parsers import MultiPartParser, FormParser

@@ -75,8 +75,8 @@ REST_FRAMEWORK = {
 # Configure Simple JWT settings
 # Configure Simple JWT settings
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
@@ -169,3 +169,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+
+# Sessions expire after 7 days (7 * 24 * 60 * 60 seconds)
+SESSION_COOKIE_AGE = 7 * 24 * 60 * 60  
+
+# Optional: Set sessions to expire when the browser is closed (False for persistent sessions)
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+# Allow session data to be persisted even when users close their browsers
+SESSION_SAVE_EVERY_REQUEST = True

@@ -4,7 +4,7 @@ from django.core.files import File
 
 class CustomerSerializer(serializers.ModelSerializer):
     profile_picture = serializers.ImageField(required=False, allow_null=True, use_url=False)  # Allow direct file upload
-
+    date_of_birth = serializers.DateField(format='%Y-%m-%d', input_formats=['%Y-%m-%d'])
     class Meta:
         model = Customer
         fields = ['username', 'name', 'email', 'date_of_birth', 'city', 
@@ -29,17 +29,7 @@ class CustomerSignUpSerializer(serializers.ModelSerializer):
         model = Customer
         fields = ['username', 'name', 'email', 'date_of_birth', 'city', 'state', 'country', 'nickname', 'phone', 'profile_picture', 'favorites', 'password']
 
-    def create(self, validated_data):
-        password = validated_data.pop('password')
-        customer = Customer(**validated_data)
-        customer.set_password(password)
-        customer.save()
-        return customer
-    
-    def validate_profile_picture(self, value):
-        # Example of incorrect usage that could cause your error
-        value = super().validate_profile_picture(value)  # THIS is incorrect
-        return value
+
     
 # customers/serializers.py
 class LogoutSerializer(serializers.Serializer):

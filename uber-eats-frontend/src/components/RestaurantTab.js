@@ -17,7 +17,7 @@ const RestaurantTab = () => {
                 setRestaurant(restaurantResponse.data);
 
                 // Fetch restaurant menu items
-                const menuResponse = await axios.get('http://localhost:8000/api/restaurants/1/menu/');
+                const menuResponse = await axios.get('http://localhost:8000/api/restaurants/');
                 setMenuItems(menuResponse.data);
             } catch (error) {
                 console.error('Error fetching restaurant details:', error);

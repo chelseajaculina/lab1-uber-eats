@@ -1,9 +1,17 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
+from django import forms
 
 def upload_path(instance, filename):
-    return '/'.join(['profile_pictures', str(instance.username), filename])
+    # Extract the file extension
+    extension = filename.split('.')[-1]
+    
+    # Format the new filename with the user's name and original extension
+    new_filename = f"{instance.username}'_'('profile_picture').{extension}"
+    
+    # Define the full path to save the file
+    return '/'.join(['profile_pictures', str(instance.username), new_filename])
+
 
 class Customer(AbstractUser):
     name = models.CharField(max_length=100)

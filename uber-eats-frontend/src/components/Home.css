@@ -139,3 +139,99 @@
   margin-top: 0.5rem;
   font-size: 1.25rem;
 }
+
+
+/* Home.css */
+
+.home-container {
+  padding: 20px;
+}
+
+/* Horizontal scrolling for categories */
+.categories-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+  padding: 10px 0;
+  scrollbar-width: thin; /* For modern browsers */
+}
+
+.category-item {
+  flex: 0 0 auto;
+  text-align: center;
+  cursor: pointer;
+}
+
+.category-item img {
+  width: 60px;
+  height: 60px;
+}
+
+/* Promotions Section */
+.promotions-section {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 20px 0;
+}
+
+.promotion-card {
+  background-color: #f9f9f9;
+  padding: 20px;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  text-align: center;
+  width: 250px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.promotion-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+
+/* Brands Section */
+.brands-section {
+  margin-top: 30px;
+}
+
+.brands-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+}
+
+.brand-card {
+  flex: 0 0 auto;
+  width: 200px;
+  text-align: center;
+}
+
+.brand-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* Home.css */
+
+.favorite-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  color: #e0245e; /* Set color for heart icon (red) */
+  font-size: 24px;
+}
+
+.brand-card {
+  position: relative; /* Required for positioning favorite icon inside the card */
+  flex: 0 0 auto;
+  width: 200px;
+  text-align: center;
+}
+

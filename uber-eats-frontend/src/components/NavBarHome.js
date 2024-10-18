@@ -3,7 +3,7 @@ import './NavBar.css';
 import axios from 'axios';
 import {
     FaBars, FaMapMarkerAlt, FaShoppingCart,
-    FaRegBookmark, FaWallet, FaUtensils, FaLifeRing, FaCar, FaGift
+    FaRegBookmark, FaWallet, FaUtensils, FaLifeRing, FaCar, FaGift, FaRegGrinHearts
 } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import Logout from '../components/Logout'; // Import the Logout component
@@ -13,7 +13,6 @@ const NavBarHome = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState('San Jose State University');
     const [name, setName] = useState('');
-    const [city, setCity] = useState('');
     const [profilePicture, setProfilePic] = useState('localStorage.getItem("profilePicture") || ""');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -37,7 +36,6 @@ const NavBarHome = () => {
                     });
                     console.log('Fetched data:', response.data);
                     setName(response.data.name);
-                    setCity(response.data.city);
                     if (response.data.profile_picture) {
                         const profilePictureUrl = response.data.profile_picture;
                         setProfilePic(profilePictureUrl);
@@ -118,17 +116,17 @@ const NavBarHome = () => {
 
                             <img src={profilePicture} alt="User Profile" className="user-profile-pic" />
                             <h3>Welcome, {name || "Guest"}</h3>
-                            <h3>Welcome, {city || "Guest"}</h3>
                             <Link to="/userdashboard" className="manage-account-link">Manage account</Link>
                             <div className="side-links">
                                 <Link to="/orders" onClick={toggleMenu}><FaRegBookmark /> Orders</Link>
-                                <Link to="/wallet" onClick={toggleMenu}><FaWallet /> Wallet</Link>
-                                <Link to="/meal-plan" onClick={toggleMenu}><FaUtensils /> Meal plan</Link>
-                                <Link to="/help" onClick={toggleMenu}><FaLifeRing /> Help</Link>
-                                <Link to="/ride" onClick={toggleMenu}><FaCar /> Get a ride</Link>
-                                <Link to="/promotions" onClick={toggleMenu}><FaGift /> Promotions</Link>
-                                <Link to="/uber-one" onClick={toggleMenu}>Uber One <span className="promo-text">Try free for 4 weeks</span></Link>
-                                <Link to="/invite-friends" onClick={toggleMenu}><FaGift /> Invite friends</Link>
+                                <Link to="/favorites" onClick={toggleMenu}><FaRegGrinHearts /> Favorites</Link>
+                                <Link to="" onClick={toggleMenu}><FaWallet /> Wallet</Link>
+                                <Link to="" onClick={toggleMenu}><FaUtensils /> Meal plan</Link>
+                                <Link to="" onClick={toggleMenu}><FaLifeRing /> Help</Link>
+                                <Link to="" onClick={toggleMenu}><FaCar /> Get a ride</Link>
+                                <Link to="" onClick={toggleMenu}><FaGift /> Promotions</Link>
+                                <Link to="" onClick={toggleMenu}>Uber One <span className="promo-text">Try free for 4 weeks</span></Link>
+                                <Link to="" onClick={toggleMenu}><FaGift /> Invite friends</Link>
                             </div>
                             {/* Logout Button */}
                             <Logout /> {/* Include the Logout button component here */}

@@ -4,7 +4,7 @@ import axios from 'axios';
 import './SignUp.css';
 import { Link, useNavigate } from 'react-router-dom';
 
-const SignUp = () => {
+const CustomerSignUp = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: '',
@@ -23,8 +23,7 @@ const SignUp = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/api/customers/signup/', formData);
-            console.log('Response from server:', response.data);
+            await axios.post('http://localhost:8000/api/customers/signup/', formData);
             alert('Registration successful');
             navigate('home/');
         } catch (error) {
@@ -69,4 +68,4 @@ const SignUp = () => {
     );
 };
 
-export default SignUp;
+export default CustomerSignUp;

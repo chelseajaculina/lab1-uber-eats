@@ -5,6 +5,9 @@
     align-items: center;
     padding: 40px;
     background-color: #f7f7f7;
+    /* background: url('/public/images/customerlogin.png') center/cover no-repeat; */
+    
+    
 }
 
 /* Title for the login section */

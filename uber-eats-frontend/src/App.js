@@ -8,6 +8,11 @@ import UserDashboard from './components/UserDashboard';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Welcome from './components/Welcome';
 import RestaurantTab from './components/RestaurantTab';
+import RestaurantSignUp from './components/RestaurantSignUp';
+import RestaurantLogin from './components/RestaurantLogin';
+import CustomerLogin from './components/CustomerLogin';
+import CustomerSignUp from './components/CustomerSignUp';
+import Favorites from './components/Favorites';
 
 
 
@@ -30,7 +35,19 @@ const App = () => {
                     <Route path="/" element={<Welcome/>} />
                     <Route path="/home" element= {<Home />} /> 
                     <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+
+
+                    <Route path="customer/signup" element={<CustomerSignUp />} />
+                    <Route path="customer/login" element={<CustomerLogin />} />
+
                     <Route path="/signup" element={<SignUp />} />
+
+
+                    <Route path="restaurant/signup" element={<RestaurantSignUp />} />
+                    <Route path="restaurant/login" element={<RestaurantLogin/>} />
+
+                    <Route path="/favorites" element={<Favorites />} />
+
                     <Route path="/logout" element={<Logout/>} />
                     <Route path="/welcome" element={<Welcome />} />
                     <Route path="/userdashboard" element={isAuthenticated ? <UserDashboard /> : <Navigate to="/userdashboard" />} />

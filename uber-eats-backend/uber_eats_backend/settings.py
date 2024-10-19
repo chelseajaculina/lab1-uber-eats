@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'customers',
+    'restaurants',
+    # 'accounts',
     'rest_framework_simplejwt.token_blacklist',
 ]
 
@@ -72,6 +74,7 @@ REST_FRAMEWORK = {
 }
 
 
+
 # Configure Simple JWT settings
 # Configure Simple JWT settings
 SIMPLE_JWT = {
@@ -86,6 +89,10 @@ SIMPLE_JWT = {
 # CORS_ALLOWED_ORIGINS is defined later in the file
 
 AUTH_USER_MODEL = 'customers.Customer'
+# AUTH_USER_MODEL = 'restaurants.Restaurant'
+# settings.py
+# AUTH_USER_MODEL = 'accounts.User'
+
 
 ROOT_URLCONF = 'uber_eats_backend.urls'
 
@@ -121,7 +128,10 @@ DATABASES = {
 
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',  # React frontend's address
+    'http://127.0.0.1:8000',   # Local Django server
+    'http://localhost:3000',   # React frontend
+    'http://localhost:8000',   # Local Django server
+    'http://127.0.0.1:3000'    # React frontend alternate address
 ]
 
 

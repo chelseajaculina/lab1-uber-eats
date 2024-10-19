@@ -12,6 +12,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import permissions, status
 
+
+
 # api view for signup 
 class CustomerSignUpView(generics.CreateAPIView):
     queryset = Customer.objects.all()
@@ -38,8 +40,10 @@ class CustomTokenRefreshView(TokenRefreshView):
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-class CustomLoginView(TokenObtainPairView):
+class CustomerLoginView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
+        print(f"Request data: {request.data}")  # Debugging information
+
         # Blacklist any existing tokens for the user to allow a new login
         tokens = OutstandingToken.objects.filter(user__username=request.data.get('username'))
         for token in tokens:
@@ -190,3 +194,5 @@ class UpdateProfileView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+

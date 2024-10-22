@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import RestaurantSignUpView, RestaurantProfileView, DishListCreateView, DishDetailView, UpdateRestaurantProfileView, UploadRestaurantProfilePictureView, RestaurantLoginView
+from .views import RestaurantSignUpView, GetRestaurantDataView, DishListCreateView, DishDetailView, UpdateRestaurantProfileView, UploadRestaurantProfilePictureView, RestaurantLoginView
 from .views import RestaurantSignUpView
 from rest_framework_simplejwt.views import TokenRefreshView
 
@@ -9,7 +9,7 @@ urlpatterns = [
     path('login/', RestaurantLoginView.as_view(), name='restaurant_token_obtain_pair'),
 
     # Restaurant profile management
-    path('profile/', RestaurantProfileView.as_view(), name='restaurant-profile'),
+    path('profile/', GetRestaurantDataView.as_view(), name='restaurant-profile'),
 
     # Dish management
     path('dishes/', DishListCreateView.as_view(), name='dish-list-create'),

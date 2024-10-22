@@ -116,7 +116,7 @@ const NavBarHome = () => {
 
                             <img src={profilePicture} alt="User Profile" className="user-profile-pic" />
                             <h3>Welcome, {name || "Guest"}</h3>
-                            <Link to="/userdashboard" className="manage-account-link">Manage account</Link>
+                            <Link to="/customerprofile" className="manage-account-link">Manage account</Link>
                             <div className="side-links">
                                 <Link to="/orders" onClick={toggleMenu}><FaRegBookmark /> Orders</Link>
                                 <Link to="/favorites" onClick={toggleMenu}><FaRegGrinHearts /> Favorites</Link>

@@ -32,6 +32,16 @@ class RestaurantSerializer(serializers.ModelSerializer):
         instance.timings = validated_data.get('timings', instance.timings)
         instance.save()
         return instance
+    
+    def validate_email(self, value):
+        if Restaurant.objects.filter(email=value).exists():
+            raise serializers.ValidationError("This email is already registered. Please use a different email.")
+        return value
+
+    def validate_username(self, value):
+        if Restaurant.objects.filter(username=value).exists():
+            raise serializers.ValidationError("This username is already taken. Please choose another one.")
+        return value
 
 
 class RestaurantSignUpSerializer(serializers.ModelSerializer):
@@ -44,6 +54,7 @@ class RestaurantSignUpSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         # Using Django's create_user method to hash the password
+        
         restaurant = Restaurant.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
@@ -61,27 +72,6 @@ class DishSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return Dish.objects.create(**validated_data)
-
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework import serializers
-from django.contrib.auth import authenticate
-
-class RestaurantTokenObtainPairSerializer(TokenObtainPairSerializer):
-    def validate(self, attrs):
-        username = attrs.get('username')
-        password = attrs.get('password')
-
-        user = authenticate(username=username, password=password)
-
-        if user is None:
-            raise serializers.ValidationError('Invalid credentials')
-
-        # Check if the user is a restaurant
-        if not hasattr(user, 'restaurant'):
-            raise serializers.ValidationError('This user is not a restaurant')
-
-        return super().validate(attrs)
-    
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers

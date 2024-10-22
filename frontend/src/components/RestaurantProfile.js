@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import './CustomerProfile.css'; // You can reuse the CustomerProfile CSS for similar styles or create a new CSS file for restaurant-specific styles.
+import './RestaurantProfile.css'; // You can reuse the CustomerProfile CSS for similar styles or create a new CSS file for restaurant-specific styles.
 import { Link } from 'react-router-dom';
 
 class RestaurantProfile extends Component {
@@ -42,7 +42,7 @@ class RestaurantProfile extends Component {
     // Fetch restaurant details from the backend
     fetchRestaurantDetails = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/restaurants/me/', {
+            const response = await axios.get('http://localhost:8000/api/restaurants/profile', {
                 headers: { Authorization: `Bearer ${this.state.authToken}` }
             });
             const restaurantData = response.data;

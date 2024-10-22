@@ -1,78 +1,63 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django import forms
+# from accounts.models import User
 
-# Step 2: Create Customer Model: In customer/models.py, define a Customer model. Use Django's AbstractUser class to extend default user functionality for the customer. 
-from django.contrib.auth.models import AbstractUser
-from django.db import models
-from django_countries.fields import CountryField  # If using django-countries for country dropdown
+
+def upload_path(instance, filename):
+    # Extract the file extension
+    extension = filename.split('.')[-1]
+    
+    # Format the new filename with the user's name and original extension
+    new_filename = f"{instance.username}'_'('profile_picture').{extension}"
+    
+    #  Define the full path to save the file
+    return '/'.join(['profile_pictures', str(instance.username), new_filename])
+
+
 
 
 class Customer(AbstractUser):
-    nickname = models.CharField(max_length=50, blank=True, null=True)
+    # user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer_profile', null = True)
+    name = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
     date_of_birth = models.DateField(null=True, blank=True)
-    city = models.CharField(max_length=100, blank=True, null=True)
-    state = models.CharField(max_length=100, blank=True, null=True)
-    country = CountryField(blank=True, null=True)  # Using django-countries for country dropdown
-    phone_number = models.CharField(max_length=15, blank=True, null=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
-    favorites = models.ManyToManyField('Restaurant', related_name='favorite_customers', blank=True)
+    city = models.CharField(max_length=100, null=True, blank=True)
+    state = models.CharField(max_length=100, null=True, blank=True)
+    country = models.CharField(max_length=100, null=True, blank=True)
+    nickname = models.CharField(max_length=100, null=True, blank=True)
+    phone = models.CharField(max_length=15, null=True, blank=True)
+    profile_picture = models.ImageField(null=True, blank=True, upload_to=upload_path)
+    favorites = models.TextField(null=True, blank=True)  # Assuming favorites is a text field
+    # user_type = models.CharField(default='restaurant', max_length=10)
+
+
+    REQUIRED_FIELDS = ['name', 'email']
+    USERNAME_FIELD = 'username'
 
     def __str__(self):
-        return self.username
-
-    # Add unique related_name for groups and user_permissions to avoid conflicts with auth.User
+        return f"{self.username} - {self.email}"
+    
+    def get_profile_picture_url(self):
+        if self.profile_picture and hasattr(self.profile_picture, 'url'):
+            return self.profile_picture.url
+        return '/static/images/default_profile_picture.png'  # Path to a default placeholder image
+    
     groups = models.ManyToManyField(
         'auth.Group',
-        related_name='customer_users',
+        related_name='customer_user_set',
         blank=True,
-        help_text='The groups this user belongs to.',
-        verbose_name='groups',
+        help_text='The groups this customer belongs to.',
+        verbose_name='groups'
     )
+    
     user_permissions = models.ManyToManyField(
         'auth.Permission',
-        related_name='customer_users',
+        related_name='customer_user_permissions',
         blank=True,
-        help_text='Specific permissions for this user.',
-        verbose_name='user permissions',
+        help_text='Specific permissions for this customer.',
+        verbose_name='user permissions'
     )
 
-
-# Step 3: Create Restaurant Model: You'll need a Restaurant model that customers can mark as favorites. You can define it in the same models.py file:
-class Restaurant(models.Model):
-    name = models.CharField(max_length=255)
-    location = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-    contact_info = models.CharField(max_length=255, blank=True)
-    logo = models.ImageField(upload_to='restaurant_logos/', null=True, blank=True)
-
-    # Add more fields as needed.
-    
-    def __str__(self):
-        return self.name
-
-from django.db import models
-from django.contrib.auth.models import User
-
-from django.db import models
-from django.contrib.auth.models import User
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_picture = models.ImageField(upload_to='profile_pics/', default='default.jpg')
-    nickname = models.CharField(max_length=100, blank=True, null=True)
-    date_of_birth = models.DateField(blank=True, null=True)
-    city = models.CharField(max_length=100, blank=True, null=True)
-    state = models.CharField(max_length=100, blank=True, null=True)
-    country = models.CharField(max_length=100, blank=True, null=True)
-    phone_number = models.CharField(max_length=100, blank=True, null=True)
-
-    def __str__(self):
-        return f'{self.user.username} Profile'
-
-from django import forms
-from .models import Profile
-
-class ProfileUpdateForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = ['profile_picture']
+def upload_path(instance, filename):
+    return '/'.join(['profile_pictures', str(instance.username), filename])

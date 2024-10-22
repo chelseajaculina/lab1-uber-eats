@@ -51,7 +51,7 @@ const RestaurantSignUp = () => {
                     type="text"
                     name="username"
                     onChange={handleChange}
-                    placeholder="Username"
+                    placeholder="Restaurant Username"
                     required
                 />
                 <input

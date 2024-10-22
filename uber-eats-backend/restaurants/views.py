@@ -166,11 +166,10 @@ logger = logging.getLogger(__name__)
 class CustomTokenRefreshView(TokenRefreshView):
     permission_classes = [IsAuthenticated]
 
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
-from .serializers import RestaurantTokenObtainPairSerializer
+from rest_framework.permissions import AllowAny
 
 class RestaurantLoginView(TokenObtainPairView):
+    permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
         print(f"Request data: {request.data}")  # Debugging information
@@ -184,6 +183,6 @@ class RestaurantLoginView(TokenObtainPairView):
                 pass
 
         response = super().post(request, *args, **kwargs)
-        # Add message indicating successful login
         response.data['message'] = 'You are now logged in successfully.'
         return response
+

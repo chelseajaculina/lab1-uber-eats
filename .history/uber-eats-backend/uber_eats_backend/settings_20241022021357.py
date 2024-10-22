@@ -30,14 +30,6 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-# CORS_ALLOWED_ORIGINS is defined later in the file
-
-#AUTH_USER_MODEL = 'customers.Customer'
-AUTH_USER_MODEL = 'restaurants.Restaurant'
-# settings.py
-# AUTH_USER_MODEL = 'accounts.User'
-
-
 # Application definition
 
 INSTALLED_APPS = [

@@ -1,73 +1,103 @@
-.App {
-  text-align: center;
+body {
+  padding-top: 56px;
+  
+  
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.navbar {
+  background: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  padding: 0px;
+  margin: 0px;
+  border-radius: 0px;
+  border: 0px;
+  height: 56px;
+  width: 100%;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 0 20px;
 }
+.navbar-inner {
+  background: white;
+  
 
-.App-link {
-  color: #61dafb;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.navcontainer{
+  align:left;
+  margin: 0px;
 }
-
-/* frontend/src/App.css */
-.signup-container {
-  width: 50%;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.navbar-dark .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;..");
 }
-
-.signup-form {
-  display: flex;
-  flex-direction: column;
+.search-form {
+  border-radius: 30px 0px 0px 30px;
+ }
+ .location-form {
+  border-radius: 30px 30px 30px 30px;
+ }
+.search-btn {
+  border-radius: 0px 30px 30px 0px;
+ 
 }
-
-.signup-form input {
-  margin: 10px 0;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+.btn-toggler{
+  border-radius: 30px 30px 30px 30px;
+  background: transparent;
+  color:black
 }
-
-.signup-btn {
-  background-color: #28a745;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
+.radio_label{
+  border-radius:15px;
+  padding: 8px 14px;
+  font-size: 14px;
+  background: white;
+  color: black;
+  margin: 0px;
+  
   cursor: pointer;
 }
-
-.signup-btn:hover {
-  background-color: #218838;
+.radio_anchor{
+  
+  border-radius:15px;
+  padding: 8px 14px;
+  font-size: 14px;
+  background: white;
+  color: black;
+  margin: 0px;
+  
+  cursor: pointer;
+}
+.mainradio{
+  display: inline-flex;
+  overflow: hidden;
+  border-radius:15px; 
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.25)
+}
+.radio_button{
+  display: none;
+  
+}
+.radio_button:checked+.radio_label{
+  background: black;
+  color: white;
+}.radio_button:checked+.radio_anchor{
+  background: black;
+  color: white;
+}
+.brand{
+  margin-right:50px; 
+}
+.whitetext{
+  color: white;
+}
+.pro-sidebar .pro-menu .pro-menu-item > .pro-inner-item{
+  font-size: x-large;
+}
+.pro-sidebar > .pro-sidebar-inner{
+  margin-bottom: -5000px;
+    padding-bottom: 5000px;
 }

@@ -1,21 +1,15 @@
-from django.conf import settings
 from django.urls import path
-
-
-from . import views
-
-
-# Step 12: Update URL Patterns: In customer/urls.py, add the following:
+from .views import UserProfileView, CustomerSignUpView, LogoutView, CustomerProfileView, UploadProfilePictureView, GetCustomerDataView, GetProfilePictureView, CustomerLoginView, TokenRefreshView
 
 urlpatterns = [
-    path('signup/', views.customer_signup, name='customer_signup'),
-    path('profile/', views.profile, name='profile'),
-
-    path('home/', views.home_page, name='home'),  # home page route
-    path('dashboard/', views.landing_page, name='dashboard'),# post log in
-    path('add-to-favorites/<int:restaurant_id>/', views.add_to_favorites, name='add_to_favorites'),
-    
-    path('cart/', views.cart_view, name='cart'),
-    path('place-order/', views.place_order, name='place_order'),
+    path('signup/', CustomerSignUpView.as_view(), name='customer-signup'),
+    path('login/', CustomerLoginView.as_view(), name='token_obtain_pair'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('update/', CustomerProfileView.as_view(), name='customer-update'),
+    path('upload-profile-picture/', UploadProfilePictureView.as_view(), name='upload-profile-picture'),
+    path('me/', GetCustomerDataView.as_view(), name='customer-profile'),
+    path('profile-picture/', GetProfilePictureView.as_view(), name='get-profile-picture'),
+    path('api/user-profile/', UserProfileView.as_view(), name='user-profile'),
 
 ]

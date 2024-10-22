@@ -4,7 +4,7 @@ import Home from './components/Home';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
 import Logout from './components/Logout';
-import CustomerProfile from './components/CustomerProfile';
+import UserDashboard from './components/UserDashboard';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Welcome from './components/Welcome';
 import RestaurantTab from './components/RestaurantTab';
@@ -13,11 +13,7 @@ import RestaurantLogin from './components/RestaurantLogin';
 import CustomerLogin from './components/CustomerLogin';
 import CustomerSignUp from './components/CustomerSignUp';
 import Favorites from './components/Favorites';
-import RestaurantDashboard from './components/RestaurantDashboard';
-import RestaurantProfile from './components/RestaurantProfile';
-import DishDashboard from './components/DishDashboard';
-import OrdersManagement from './components/OrdersManagement';
-                                                                                                                                                                                                                                          
+
 
 
 const App = () => {
@@ -50,20 +46,11 @@ const App = () => {
                     <Route path="restaurant/signup" element={<RestaurantSignUp />} />
                     <Route path="restaurant/login" element={<RestaurantLogin/>} />
 
-                    <Route path = "/restaurantdashboard" element={<RestaurantDashboard />} />
-                    <Route path="/restaurantprofile" element={isAuthenticated ? <RestaurantProfile/> : <Navigate to="/restaurantprofile" />} />
-
-
-                    <Route path="/dishdashboard" element={<DishDashboard />} />
-
-                    <Route path="/orders" element={<OrdersManagement />} />
-
-
                     <Route path="/favorites" element={<Favorites />} />
 
                     <Route path="/logout" element={<Logout/>} />
                     <Route path="/welcome" element={<Welcome />} />
-                    <Route path="/customerprofile" element={isAuthenticated ? <CustomerProfile/> : <Navigate to="/customerprofile" />} />
+                    <Route path="/userdashboard" element={isAuthenticated ? <UserDashboard /> : <Navigate to="/userdashboard" />} />
                     <Route path="/restauranttab" element={<RestaurantTab />} />
                     {/* Add other routes here */}
                 </Routes>

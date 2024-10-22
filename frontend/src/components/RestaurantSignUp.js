@@ -59,7 +59,7 @@ const RestaurantSignUp = () => {
                 <Link to="/home" className="brand-title">Uber <span>Business</span></Link>
             </header>
             <form className="signup-form" onSubmit={handleRestaurantSignUpSubmit}>
-                <h1>Restaurant Sign Up</h1>
+                <h3>Restaurant Sign Up</h3>
                 <input 
                     type="text" 
                     name="username" 

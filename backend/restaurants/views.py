@@ -126,35 +126,51 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# Update restaurant data
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser
+from .serializers import RestaurantSerializer
+from .models import Restaurant
+import logging
+
+# Setup logger
+logger = logging.getLogger(__name__)
+
+from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from .models import Restaurant
+from .serializers import RestaurantSerializer
+import logging
+
+logger = logging.getLogger(__name__)
+
 class UpdateRestaurantProfileView(APIView):
     serializer_class = RestaurantSerializer
     permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]  # Ensure the view can handle multipart form data
+    parser_classes = [MultiPartParser, FormParser]  # Required for handling file uploads
 
     def patch(self, request):
         try:
-            # Check that the request user is authenticated
-            if not request.user.is_authenticated:
-                return Response({'error': 'User is not authenticated.'}, status=status.HTTP_403_FORBIDDEN)
-
-            logger.info(f"Request data: {request.data}")  # Debugging: See what data is received by the server
-
-            # Fetch the restaurant instance
-            restaurant = Restaurant.objects.get(pk=request.user.pk)
+            # Fetch the authenticated restaurant instance
+            restaurant = request.user
 
             # Serialize and validate data
-            serializer = RestaurantSerializer(restaurant, data=request.data, partial=True)
+            serializer = self.serializer_class(restaurant, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
-                logger.error(f"Serializer errors: {serializer.errors}")  # Debugging
+                logger.error(f"Serializer errors: {serializer.errors}")
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Restaurant.DoesNotExist:
             return Response({'error': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger.error(f"Error: {str(e)}")  # Debugging
+            logger.error(f"Error: {str(e)}")
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 from rest_framework.views import APIView

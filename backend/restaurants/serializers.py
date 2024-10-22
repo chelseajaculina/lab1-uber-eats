@@ -4,6 +4,8 @@ from rest_framework import serializers
 
 # Restaurant Serializer for Sign-Up and Profile Management
 class RestaurantSerializer(serializers.ModelSerializer):
+    profile_picture = serializers.ImageField(required=False, allow_null=True, use_url=False)  # Allow direct file upload
+
     class Meta:
         model = Restaurant
         fields = ['id', 'username', 'email', 'password', 'restaurant_name', 'location', 'description', 'contact_info', 'images', 'timings']
@@ -23,6 +25,13 @@ class RestaurantSerializer(serializers.ModelSerializer):
         )
         return restaurant
 
+    def get_profile_picture(self, obj):
+        # Return URL for the profile picture or a default if not available
+        if obj.profile_picture:
+            return obj.profile_picture.url
+        return '/static/images/default_profile_picture.png'  # Default image path
+
+
     def update(self, instance, validated_data):
         instance.restaurant_name = validated_data.get('restaurant_name', instance.restaurant_name)
         instance.location = validated_data.get('location', instance.location)
@@ -33,16 +42,21 @@ class RestaurantSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
     
-    def validate_email(self, value):
-        if Restaurant.objects.filter(email=value).exists():
-            raise serializers.ValidationError("This email is already registered. Please use a different email.")
-        return value
+    # def validate_email(self, value):
+    #     if Restaurant.objects.filter(email=value).exists():
+    #         raise serializers.ValidationError("This email is already registered. Please use a different email.")
+    #     return value
 
     def validate_username(self, value):
         if Restaurant.objects.filter(username=value).exists():
             raise serializers.ValidationError("This username is already taken. Please choose another one.")
         return value
 
+    def validate_profile_picture(self, value):
+        # Check that the file is an image, if needed
+        if not value.content_type.startswith('image'):
+            raise serializers.ValidationError("Uploaded file is not an image.")
+        return value
 
 class RestaurantSignUpSerializer(serializers.ModelSerializer):
     class Meta:
@@ -72,6 +86,7 @@ class DishSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return Dish.objects.create(**validated_data)
+
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers

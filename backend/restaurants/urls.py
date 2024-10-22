@@ -15,7 +15,7 @@ urlpatterns = [
     path('dishes/', DishListCreateView.as_view(), name='dish-list-create'),
     path('dishes/<int:dish_id>/', DishDetailView.as_view(), name='dish-detail'),
 
-    path('restaurants/profile/update/', UpdateRestaurantProfileView.as_view(), name='restaurant-profile-update'),
+    path('update/', UpdateRestaurantProfileView.as_view(), name='restaurant-profile-update'),
     path('restaurants/profile/upload/', UploadRestaurantProfilePictureView.as_view(), name='restaurant-profile-upload'),
 
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

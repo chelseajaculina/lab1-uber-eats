@@ -27,7 +27,7 @@ const RestaurantLogin = () => {
             localStorage.setItem('access_token', response.data.access);
             localStorage.setItem('refresh_token', response.data.refresh);
             alert('Login successful');
-            navigate('/');
+            navigate('/restaurantdashboard');  // Redirect to the Restaurant page
         } catch (error) {
             console.error('Login failed:', error.response ? error.response.data : error);
             if (error.response && error.response.data.error) {

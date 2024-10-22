@@ -1,6 +1,14 @@
-/* Shared container styling */
+/* Shared container styling for login and signup */
+.signup-container, .login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
+    background-color: #f7f7f7; /* Light gray background */
+}
 
-/* Shared header styling */
+/* Shared header styling for both signup and login */
 .signup-header, .login-header {
     background-color: transparent;
     width: 100%;
@@ -8,16 +16,9 @@
     padding: 10px;
 }
 
-.signup-container, .login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-
-}
-
+/* Brand title styling for consistency */
 .brand-title {
-    color: white;
+    color: black;
     font-size: 24px;
 }
 
@@ -25,21 +26,39 @@
     color: #34a853; /* Green color for "Eats" */
 }
 
-/* Shared form styling */
+/* Container to hold both forms side by side */
+.signup-forms {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    max-width: 1200px;
+    gap: 20px; /* Space between the two forms */
+    margin-top: 20px;
+}
+
+/* Styling for each individual form container */
+.form-container {
+    flex: 1;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Shared form styling for inputs and buttons */
 .signup-form, .login-form {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 400px;
     margin-top: 20px;
 }
 
 .signup-form h2, .login-form h2 {
-    text-align: left;
+    text-align: center;
     font-size: 18px;
     margin-bottom: 10px;
     color: #333;
-    text-align: center;
 }
 
 .signup-form input, .login-form input {
@@ -113,4 +132,17 @@
     border: none;      /* Remove default border */
     padding: 0.5rem;   /* Optional padding to make it look button-like */
     color: #fff;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .signup-forms {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-container {
+        width: 100%;
+        margin-bottom: 20px;
+    }
 }

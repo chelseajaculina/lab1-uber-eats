@@ -73,10 +73,8 @@ REST_FRAMEWORK = {
     ],
 }
 
-
-
 # Configure Simple JWT settings
-# Configure Simple JWT settings
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
@@ -88,11 +86,14 @@ SIMPLE_JWT = {
 
 # CORS_ALLOWED_ORIGINS is defined later in the file
 
-#AUTH_USER_MODEL = 'customers.Customer'
-AUTH_USER_MODEL = 'restaurants.Restaurant'
+AUTH_USER_MODEL = 'customers.Customer'
+#AUTH_USER_MODEL = 'restaurants.Restaurant'
 # settings.py
 # AUTH_USER_MODEL = 'accounts.User'
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 ROOT_URLCONF = 'uber_eats_backend.urls'
 

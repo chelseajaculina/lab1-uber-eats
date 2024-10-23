@@ -4,6 +4,8 @@ from rest_framework import serializers
 
 # Restaurant Serializer for Sign-Up and Profile Management
 class RestaurantSerializer(serializers.ModelSerializer):
+    profile_picture = serializers.ImageField(required=False, allow_null=True, use_url=False)  # Allow direct file upload
+
     class Meta:
         model = Restaurant
         fields = ['id', 'username', 'email', 'password', 'restaurant_name', 'location', 'description', 'contact_info', 'images', 'timings']
@@ -23,6 +25,13 @@ class RestaurantSerializer(serializers.ModelSerializer):
         )
         return restaurant
 
+    def get_profile_picture(self, obj):
+        # Return URL for the profile picture or a default if not available
+        if obj.profile_picture:
+            return obj.profile_picture.url
+        return '/static/images/default_profile_picture.png'  # Default image path
+
+
     def update(self, instance, validated_data):
         instance.restaurant_name = validated_data.get('restaurant_name', instance.restaurant_name)
         instance.location = validated_data.get('location', instance.location)
@@ -32,7 +41,22 @@ class RestaurantSerializer(serializers.ModelSerializer):
         instance.timings = validated_data.get('timings', instance.timings)
         instance.save()
         return instance
+    
+    # def validate_email(self, value):
+    #     if Restaurant.objects.filter(email=value).exists():
+    #         raise serializers.ValidationError("This email is already registered. Please use a different email.")
+    #     return value
 
+    def validate_username(self, value):
+        if Restaurant.objects.filter(username=value).exists():
+            raise serializers.ValidationError("This username is already taken. Please choose another one.")
+        return value
+
+    def validate_profile_picture(self, value):
+        # Check that the file is an image, if needed
+        if not value.content_type.startswith('image'):
+            raise serializers.ValidationError("Uploaded file is not an image.")
+        return value
 
 class RestaurantSignUpSerializer(serializers.ModelSerializer):
     class Meta:
@@ -44,6 +68,7 @@ class RestaurantSignUpSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         # Using Django's create_user method to hash the password
+        
         restaurant = Restaurant.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
@@ -62,26 +87,6 @@ class DishSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return Dish.objects.create(**validated_data)
 
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework import serializers
-from django.contrib.auth import authenticate
-
-class RestaurantTokenObtainPairSerializer(TokenObtainPairSerializer):
-    def validate(self, attrs):
-        username = attrs.get('username')
-        password = attrs.get('password')
-
-        user = authenticate(username=username, password=password)
-
-        if user is None:
-            raise serializers.ValidationError('Invalid credentials')
-
-        # Check if the user is a restaurant
-        if not hasattr(user, 'restaurant'):
-            raise serializers.ValidationError('This user is not a restaurant')
-
-        return super().validate(attrs)
-    
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers

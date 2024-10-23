@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import './CustomerProfile.css'; // You can reuse the CustomerProfile CSS for similar styles or create a new CSS file for restaurant-specific styles.
+import './RestaurantProfile.css';
 import { Link } from 'react-router-dom';
 
 class RestaurantProfile extends Component {
@@ -8,11 +8,12 @@ class RestaurantProfile extends Component {
         super(props);
         this.state = {
             restaurant: {
-                name: '',
-                location: '',
-                description: '',
-                email: '',
-                phone: '',
+                name: localStorage.getItem('restaurantName') || '',
+                location: localStorage.getItem('restaurantLocation') || '',
+                description: localStorage.getItem('restaurantDescription') || '',
+                email: localStorage.getItem('restaurantEmail') || '',
+                phone: localStorage.getItem('restaurantPhone') || '',
+                contact_info: localStorage.getItem('restaurantContactInfo') || '',
                 profilePicture: localStorage.getItem('restaurantProfilePicture') || ''
             },
             authToken: localStorage.getItem('access_token'),
@@ -46,14 +47,23 @@ class RestaurantProfile extends Component {
                 headers: { Authorization: `Bearer ${this.state.authToken}` }
             });
             const restaurantData = response.data;
+
+            // Save to state and local storage for persistence
             this.setState({
                 restaurant: {
                     ...restaurantData
                 },
                 previewProfilePicture: restaurantData.profile_picture ? `${this.mediaBaseURL}${restaurantData.profile_picture}` : ''
             });
+
+            localStorage.setItem('restaurantName', restaurantData.name || '');
+            localStorage.setItem('restaurantLocation', restaurantData.location || '');
+            localStorage.setItem('restaurantDescription', restaurantData.description || '');
+            localStorage.setItem('restaurantEmail', restaurantData.email || '');
+            localStorage.setItem('restaurantPhone', restaurantData.phone || '');
+            localStorage.setItem('restaurantContactInfo', restaurantData.contact_info || '');
             if (restaurantData.profile_picture) {
-                localStorage.setItem('restaurantProfilePicture', `${this.mediaBaseURL}${restaurantData.profile_picture}`);
+                localStorage.setItem('profilePicture', `${this.mediaBaseURL}${restaurantData.profile_picture}`);
             }
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -76,6 +86,9 @@ class RestaurantProfile extends Component {
                 [name]: value
             }
         }));
+
+        // Update local storage to maintain the data across refreshes
+        localStorage.setItem(`restaurant${name.charAt(0).toUpperCase() + name.slice(1)}`, value);
     };
 
     handleProfilePictureChange = (e) => {
@@ -115,7 +128,7 @@ class RestaurantProfile extends Component {
                 }
             });
 
-            // Update state if profile picture is changed
+            // Update state and local storage if profile picture is changed
             if (response.data.profile_picture) {
                 const updatedProfilePicture = `${this.mediaBaseURL}${response.data.profile_picture}?timestamp=${new Date().getTime()}`;
                 localStorage.setItem('restaurantProfilePicture', updatedProfilePicture);
@@ -125,17 +138,30 @@ class RestaurantProfile extends Component {
                 });
             }
 
-            // Update the rest of the restaurant fields in the state
-            this.setState(prevState => ({
-                restaurant: {
+            // Update the rest of the restaurant fields in the state and local storage
+            this.setState(prevState => {
+                const updatedRestaurant = {
                     ...prevState.restaurant,
                     name: response.data.name,
                     location: response.data.location,
                     description: response.data.description,
                     email: response.data.email,
-                    phone: response.data.phone
-                }
-            }));
+                    phone: response.data.phone,
+                    contact_info: response.data.contact_info
+                };
+                
+                // Update local storage with the new values
+                localStorage.setItem('restaurantName', updatedRestaurant.name);
+                localStorage.setItem('restaurantLocation', updatedRestaurant.location);
+                localStorage.setItem('restaurantDescription', updatedRestaurant.description);
+                localStorage.setItem('restaurantEmail', updatedRestaurant.email);
+                localStorage.setItem('restaurantPhone', updatedRestaurant.phone);
+                localStorage.setItem('restaurantContactInfo', updatedRestaurant.contact_info);
+
+                return {
+                    restaurant: updatedRestaurant
+                };
+            });
 
             alert('Profile updated successfully');
         } catch (error) {
@@ -156,10 +182,10 @@ class RestaurantProfile extends Component {
                         <li>Analytics</li>
                     </ul>
                 </aside>
-    
+
                 <main className="content">
                     <h1>{this.state.restaurant.name ? `${this.state.restaurant.name} Account Info` : "Restaurant Account Info"}</h1>
-    
+
                     <div className="profile-section">
                         <label>Profile Picture:</label><br />
                         {this.state.previewProfilePicture ? (
@@ -181,28 +207,28 @@ class RestaurantProfile extends Component {
                             Update Profile Picture
                         </button>
                     </div>
-    
+
                     <form onSubmit={this.handleSubmit}>
                         {/* Rest of the form fields */}
                         <div>
                             <label>Restaurant Name:</label>
-                            <input type="text" name="name" value={this.state.restaurant.name || ''} onChange={this.handleInputChange} />
+                            <input type="text" name="name" value={this.state.restaurant.name} onChange={this.handleInputChange} placeholder="Enter Restaurant Name" />
                         </div>
                         <div>
                             <label>Location:</label>
-                            <input type="text" name="location" value={this.state.restaurant.location || ''} onChange={this.handleInputChange} />
+                            <input type="text" name="location" value={this.state.restaurant.location} onChange={this.handleInputChange} placeholder="Enter Location" />
                         </div>
                         <div>
                             <label>Description:</label>
-                            <textarea name="description" value={this.state.restaurant.description || ''} onChange={this.handleInputChange}></textarea>
+                            <textarea name="description" value={this.state.restaurant.description} onChange={this.handleInputChange} placeholder="Enter Description"></textarea>
                         </div>
                         <div>
                             <label>Email:</label>
-                            <input type="email" name="email" value={this.state.restaurant.email || ''} onChange={this.handleInputChange} />
+                            <input type="email" name="email" value={this.state.restaurant.email} onChange={this.handleInputChange} placeholder="Enter Email" />
                         </div>
                         <div>
-                            <label>Phone:</label>
-                            <input type="tel" name="phone" value={this.state.restaurant.phone || ''} onChange={this.handleInputChange} />
+                            <label>Contact Info:</label>
+                            <input type="text" name="contact_info" value={this.state.restaurant.contact_info} onChange={this.handleInputChange} placeholder="Enter Contact Info" />
                         </div>
                         <button type="submit">Update Profile</button>
                     </form>

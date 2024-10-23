@@ -38,7 +38,7 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={<Welcome/>} />
                     <Route path="/home" element= {<Home />} /> 
-                    <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+                    <Route path="/login" element={<Login />} />
 
 
                     <Route path="customer/signup" element={<CustomerSignUp />} />

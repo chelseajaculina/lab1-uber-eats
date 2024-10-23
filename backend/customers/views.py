@@ -13,6 +13,16 @@ from rest_framework.response import Response
 from rest_framework import permissions, status
 
 
+class CustomerSignUpView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        serializer = CustomerSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Customer signed up successfully!"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 # api view for signup 
 class CustomerSignUpView(generics.CreateAPIView):
@@ -36,26 +46,50 @@ class LogoutView(APIView):
 class CustomTokenRefreshView(TokenRefreshView):
     permission_classes = [IsAuthenticated]
 
-
-from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework import status
+from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
+
+User = get_user_model()
 
 class CustomerLoginView(TokenObtainPairView):
+    permission_classes = [AllowAny]
+
     def post(self, request, *args, **kwargs):
-        print(f"Request data: {request.data}")  # Debugging information
+        # Extract username and password
+        username = request.data.get('username')
+        password = request.data.get('password')
 
-        # Blacklist any existing tokens for the user to allow a new login
-        tokens = OutstandingToken.objects.filter(user__username=request.data.get('username'))
-        for token in tokens:
-            try:
-                _, _ = BlacklistedToken.objects.get_or_create(token=token)
-            except Exception as e:
-                pass
+        if not username or not password:
+            return Response({'error': 'Username and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Check if the user exists and is active
+        try:
+            user = User.objects.get(username=username)
+            if not user.is_active:
+                return Response({'error': 'User account is inactive.'}, status=status.HTTP_401_UNAUTHORIZED)
+        except User.DoesNotExist:
+            return Response({'error': 'No active account found with the given credentials.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        # Blacklist existing tokens for the user (if necessary)
+        try:
+            tokens = OutstandingToken.objects.filter(user=user)
+            for token in tokens:
+                try:
+                    _, _ = BlacklistedToken.objects.get_or_create(token=token)
+                except Exception as e:
+                    print(f"Error blacklisting token: {e}")
+        except Exception as e:
+            print(f"Error during token blacklisting: {e}")
+
+        # Proceed with login and obtain JWT tokens
         response = super().post(request, *args, **kwargs)
-        # Add message indicating successful login
         response.data['message'] = 'You are now logged in successfully.'
         return response
+
 
 from rest_framework import generics, permissions
 from .models import Customer

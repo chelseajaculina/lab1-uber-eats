@@ -1,0 +1,152 @@
+/* Container for the entire restaurant page */
+.restaurant-page {
+    width: 100%;
+    padding: 20px;
+    background-color: #f7f7f7;
+}
+
+/* Restaurant Header */
+.restaurant-header {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.restaurant-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 20px;
+}
+
+.restaurant-info {
+    flex: 1;
+}
+
+.restaurant-info h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.rating {
+    font-size: 16px;
+    color: #777;
+    margin-top: 5px;
+}
+
+.restaurant-options {
+    margin-top: 15px;
+}
+
+.option-button {
+    background-color: black;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.3s;
+}
+
+.option-button:hover {
+    background-color: #333;
+}
+
+/* Restaurant Content */
+.restaurant-content {
+    display: flex;
+    gap: 20px;
+}
+
+/* Menu Sidebar */
+.menu-sidebar {
+    width: 25%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.menu-sidebar h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.menu-sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.menu-sidebar li {
+    padding: 10px 0;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.menu-sidebar li:hover {
+    color: #0055A2; /* Highlight color on hover */
+}
+
+/* Featured Items */
+.featured-items {
+    flex: 1;
+}
+
+.featured-items h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.item-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s;
+}
+
+.item-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.item-info h4 {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.item-info p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.add-to-cart-button {
+    background-color: #34a853;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.add-to-cart-button:hover {
+    background-color: #2c8a3a;
+}

@@ -9,36 +9,10 @@ from .serializers import RestaurantSerializer, DishSerializer, RestaurantSignUpS
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 # Restaurant Sign-Up View
-class RestaurantSignUpView(APIView):
-    def post(self, request):
-        serializer = RestaurantSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "Restaurant signed up successfully!"}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 class RestaurantSignUpView(generics.CreateAPIView):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSignUpSerializer
     permission_classes = [AllowAny]
-
-
-# Restaurant Profile Management View
-class RestaurantProfileView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        restaurant = request.user
-        serializer = RestaurantSerializer(restaurant)
-        return Response(serializer.data)
-
-    def put(self, request):
-        restaurant = request.user
-        serializer = RestaurantSerializer(restaurant, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "Profile updated successfully!"}, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Dish Management Views
 class DishListCreateView(APIView):
@@ -55,6 +29,8 @@ class DishListCreateView(APIView):
             serializer.save(restaurant=request.user)
             return Response({"message": "Dish added successfully!"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
 
 class DishDetailView(APIView):
     permission_classes = [IsAuthenticated]
@@ -103,6 +79,89 @@ class RestaurantLogoutView(APIView):
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser
+from .models import Restaurant
+from .serializers import RestaurantSerializer
+import logging
+
+logger = logging.getLogger(__name__)
+
+class UpdateRestaurantProfileView(APIView):
+    serializer_class = RestaurantSerializer
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]  # Ensure the view can handle multipart form data
+
+    def patch(self, request):
+        try:
+            # Check that the request user is authenticated
+            if not request.user.is_authenticated:
+                return Response({'error': 'User is not authenticated.'}, status=status.HTTP_403_FORBIDDEN)
+
+            logger.info(f"Request data: {request.data}")  # Debugging: See what data is received by the server
+
+            # Fetch the restaurant instance
+            restaurant = Restaurant.objects.get(pk=request.user.pk)
+
+            # Serialize and validate data
+            serializer = RestaurantSerializer(restaurant, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                logger.error(f"Serializer errors: {serializer.errors}")  # Debugging
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Restaurant.DoesNotExist:
+            return Response({'error': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger.error(f"Error: {str(e)}")  # Debugging
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status, permissions
+from rest_framework.parsers import MultiPartParser, FormParser
+from .models import Restaurant
+
+class UploadRestaurantProfilePictureView(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        # Debugging: Check user and headers
+        print(f"User: {request.user}, Authenticated: {request.user.is_authenticated}")
+        print(f"Headers: {request.headers}")
+
+        if not request.user.is_authenticated:
+            return Response({'error': 'User not authenticated'}, status=status.HTTP_403_FORBIDDEN)
+
+        try:
+            # Fetch the restaurant instance associated with the authenticated user
+            restaurant = Restaurant.objects.get(user=request.user)
+
+            file = request.data.get('profile_picture')
+            if not file:
+                return Response({'error': 'No file provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Update profile picture for the authenticated restaurant
+            restaurant.profile_picture = file
+            restaurant.save()
+
+            # Return the profile picture URL
+            profile_picture_url = restaurant.profile_picture.url
+
+            return Response({'profilePicture': profile_picture_url}, status=status.HTTP_200_OK)
+
+        except Restaurant.DoesNotExist:
+            return Response({'error': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            print(f"Error: {str(e)}")  # Debugging
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .serializers import RestaurantSerializer  # You need to create this serializer
 
@@ -115,89 +174,24 @@ class GetRestaurantDataView(APIView):
         serializer = RestaurantSerializer(restaurant)
         return Response(serializer.data)
 
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.parsers import MultiPartParser, FormParser
-from .serializers import RestaurantSerializer
-from .models import Restaurant
-import logging
+class GetProfilePictureView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
-logger = logging.getLogger(__name__)
-
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.parsers import MultiPartParser, FormParser
-from .serializers import RestaurantSerializer
-from .models import Restaurant
-import logging
-
-# Setup logger
-logger = logging.getLogger(__name__)
-
-from rest_framework.views import APIView
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import status
-from .models import Restaurant
-from .serializers import RestaurantSerializer
-import logging
-
-logger = logging.getLogger(__name__)
-
-class UpdateRestaurantProfileView(APIView):
-    serializer_class = RestaurantSerializer
-    permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]  # Required for handling file uploads
-
-    def patch(self, request):
-        try:
-            # Fetch the authenticated restaurant instance
-            restaurant = request.user
-
-            # Serialize and validate data
-            serializer = self.serializer_class(restaurant, data=request.data, partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                logger.error(f"Serializer errors: {serializer.errors}")
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Restaurant.DoesNotExist:
-            return Response({'error': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            logger.error(f"Error: {str(e)}")
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-from rest_framework.views import APIView
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework import status
-
-class UploadRestaurantProfilePictureView(APIView):
-    parser_classes = [MultiPartParser, FormParser]
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return Response({'error': 'User not authenticated'}, status=status.HTTP_403_FORBIDDEN)
 
-        file = request.data.get('profile_picture')
-        if not file:
-            return Response({'error': 'No file provided'}, status=status.HTTP_400_BAD_REQUEST)
+        profile_picture_url = request.user.profile_picture.url if request.user.profile_picture else None
 
-        # Update the profile picture for the restaurant
-        request.user.profile_picture = file
-        request.user.save()
+        if not profile_picture_url:
+            return Response({'error': 'No profile picture found'}, status=status.HTTP_404_NOT_FOUND)
 
-        profile_picture_url = request.user.profile_picture.url
         return Response({'profilePicture': profile_picture_url}, status=status.HTTP_200_OK)
 
+
+
+
+from rest_framework_simplejwt.tokens import OutstandingToken, BlacklistedToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .serializers import RestaurantTokenObtainPairSerializer
 import logging
@@ -227,30 +221,24 @@ class RestaurantLoginView(TokenObtainPairView):
         response.data['message'] = 'You are now logged in successfully.'
         return response
 
-class GetProfilePictureView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return Response({'error': 'User not authenticated'}, status=status.HTTP_403_FORBIDDEN)
+    def get(self, request):
+        customer = request.user  # Assumes the user is authenticated
+        serializer = RestaurantSerializer(customer)
+        return Response(serializer.data)
+    
 
-        profile_picture_url = request.user.profile_picture.url if request.user.profile_picture else None
+# class UpdateProfileView(APIView):
+#     permission_classes = [permissions.IsAuthenticated]
+#     parser_classes = [MultiPartParser, FormParser]
 
-        if not profile_picture_url:
-            return Response({'error': 'No profile picture found'}, status=status.HTTP_404_NOT_FOUND)
-
-        return Response({'profilePicture': profile_picture_url}, status=status.HTTP_200_OK)
-
-
-class UpdateProfileView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]
-
-    def patch(self, request, *args, **kwargs):
-        user = request.user
-        serializer = RestaurantSerializer(user, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def patch(self, request, *args, **kwargs):
+#         user = request.user
+#         serializer = RestaurantSerializer(user, data=request.data, partial=True)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     

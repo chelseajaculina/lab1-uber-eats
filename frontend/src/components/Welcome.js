@@ -1,4 +1,4 @@
-import './Landing.css';
+import './Welcome.css';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { Link } from 'react-router-dom';

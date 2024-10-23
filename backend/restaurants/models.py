@@ -6,15 +6,18 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
 
+# def upload_path(instance, filename):
+#     # Extract the file extension
+#     extension = filename.split('.')[-1]
+    
+#     # Format the new filename with the user's username and original extension
+#     new_filename = f"{instance.username}_logo.{extension}"
+    
+#     # Define the full path to save the file
+#     return '/'.join(['profile_pictures', str(instance.username), new_filename])
+
 def upload_path(instance, filename):
-    # Extract the file extension
-    extension = filename.split('.')[-1]
-    
-    # Format the new filename with the user's username and original extension
-    new_filename = f"{instance.username}_logo.{extension}"
-    
-    # Define the full path to save the file
-    return '/'.join(['profile_pictures', str(instance.username), new_filename])
+    return f'profile_pictures/{instance.username}/{filename}'
 
 # Extend Django's built-in AbstractUser model for restaurant-specific fields
 class Restaurant(AbstractUser):

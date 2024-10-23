@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'customers',
     'restaurants',
-    # 'accounts',
+    #'accounts',
     'rest_framework_simplejwt.token_blacklist',
 ]
 
@@ -86,10 +86,10 @@ SIMPLE_JWT = {
 
 # CORS_ALLOWED_ORIGINS is defined later in the file
 
-# AUTH_USER_MODEL = 'customers.Customer'
-AUTH_USER_MODEL = 'restaurants.Restaurant'
+AUTH_USER_MODEL = 'customers.Customer'
+#AUTH_USER_MODEL = 'restaurants.Restaurant'
 # settings.py
-# AUTH_USER_MODEL = 'accounts.User'
+#AUTH_USER_MODEL = 'accounts.User'
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',

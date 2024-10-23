@@ -28,6 +28,7 @@
 .navbar-left {
     display: flex;
     align-items: center;
+    background-color: transparent;
 }
 
 .menu-button {
@@ -52,6 +53,7 @@
 .navbar-right {
     display: flex;
     align-items: center;
+    background-color: transparent;
 }
 
 .navbar-right button {

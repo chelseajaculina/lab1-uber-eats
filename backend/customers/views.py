@@ -13,15 +13,6 @@ from rest_framework.response import Response
 from rest_framework import permissions, status
 
 
-class CustomerSignUpView(APIView):
-    permission_classes = [permissions.AllowAny]
-
-    def post(self, request):
-        serializer = CustomerSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "Customer signed up successfully!"}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # api view for signup 

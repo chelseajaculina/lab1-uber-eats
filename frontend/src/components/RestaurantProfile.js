@@ -51,7 +51,8 @@ class RestaurantProfile extends Component {
             // Save to state and local storage for persistence
             this.setState({
                 restaurant: {
-                    ...restaurantData
+                    ...restaurantData,
+                    // profilePicture: restaurantData.profile_picture ? `${this.mediaBaseURL}${restaurantData.profile_picture}` : ''
                 },
                 previewProfilePicture: restaurantData.profile_picture ? `${this.mediaBaseURL}${restaurantData.profile_picture}` : ''
             });
@@ -63,7 +64,7 @@ class RestaurantProfile extends Component {
             localStorage.setItem('restaurantPhone', restaurantData.phone || '');
             localStorage.setItem('restaurantContactInfo', restaurantData.contact_info || '');
             if (restaurantData.profile_picture) {
-                localStorage.setItem('profilePicture', `${this.mediaBaseURL}${restaurantData.profile_picture}`);
+                localStorage.setItem('restaurantProfilePicture', `${this.mediaBaseURL}${restaurantData.profile_picture}`);
             }
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -184,8 +185,6 @@ class RestaurantProfile extends Component {
                 </aside>
 
                 <main className="content">
-                    <h1>{this.state.restaurant.name ? `${this.state.restaurant.name} Account Info` : "Restaurant Account Info"}</h1>
-
                     <div className="profile-section">
                         <label>Profile Picture:</label><br />
                         {this.state.previewProfilePicture ? (
@@ -203,13 +202,9 @@ class RestaurantProfile extends Component {
                             onChange={this.handleProfilePictureChange}
                             accept=".png,.jpg,.jpeg,.gif"
                         />
-                        <button onClick={this.handleSubmit} className="profile-picture-btn">
-                            Update Profile Picture
-                        </button>
                     </div>
 
                     <form onSubmit={this.handleSubmit}>
-                        {/* Rest of the form fields */}
                         <div>
                             <label>Restaurant Name:</label>
                             <input type="text" name="name" value={this.state.restaurant.name} onChange={this.handleInputChange} placeholder="Enter Restaurant Name" />

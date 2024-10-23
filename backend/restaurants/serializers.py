@@ -8,7 +8,17 @@ class RestaurantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Restaurant
-        fields = ['id', 'username', 'email', 'password', 'restaurant_name', 'location', 'description', 'contact_info', 'images', 'timings']
+        fields = ['id', 
+                  'username', 
+                  'email', 
+                  'password', 
+                  'restaurant_name', 
+                  'location', 
+                  'description', 
+                  'contact_info', 
+                  'images', 
+                  'timings',
+                  'profile_picture']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -21,7 +31,8 @@ class RestaurantSerializer(serializers.ModelSerializer):
             description=validated_data.get('description'),
             contact_info=validated_data.get('contact_info'),
             images=validated_data.get('images'),
-            timings=validated_data.get('timings')
+            timings=validated_data.get('timings'),
+            profile_picture=validated_data.get('profile_picture')
         )
         return restaurant
 

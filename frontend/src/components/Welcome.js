@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
-const Landing = () => {
+const Welcome = () => {
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -112,4 +112,4 @@ const Landing = () => {
     );
 };
 
-export default Landing;
+export default Welcome;

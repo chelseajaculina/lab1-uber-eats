@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-# from accounts.models import User
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
@@ -12,7 +11,7 @@ def upload_path(instance, filename):
 
 # Extend Django's built-in AbstractUser model for restaurant-specific fields
 class Restaurant(AbstractUser):
-    # user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='restaurant_profile', null = True)
+    #user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='restaurant_profile', null = True)
     restaurant_name = models.CharField(max_length=100, unique=True)
     location = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)

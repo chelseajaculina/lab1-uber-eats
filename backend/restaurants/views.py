@@ -112,9 +112,6 @@ class UploadRestaurantProfilePictureView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-
-
-
 # Get Restaurant Data View
 class GetRestaurantDataView(APIView):
     serializer_class = RestaurantSerializer
@@ -200,3 +197,16 @@ class UserProfileView(APIView):
         return Response(serializer.data)
 
 
+# views.py
+from rest_framework import viewsets
+from rest_framework.response import Response
+from .models import Restaurant, Dish
+from .serializers import RestaurantSerializer, DishSerializer
+
+class RestaurantViewSet(viewsets.ModelViewSet):
+    queryset = Restaurant.objects.all()
+    serializer_class = RestaurantSerializer
+
+class DishViewSet(viewsets.ModelViewSet):
+    queryset = Dish.objects.all()
+    serializer_class = DishSerializer

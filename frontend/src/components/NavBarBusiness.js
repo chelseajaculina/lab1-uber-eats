@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import './NavBar.css';
+import './NavBarBusiness.css';
 import axios from 'axios';
 import {
-    FaBars, FaMapMarkerAlt, FaShoppingCart,
+    FaBars,
     FaClipboardList, FaLifeRing, FaChartLine, FaConciergeBell, FaGift, FaUsers
 } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
@@ -11,11 +11,9 @@ import Logout from '../components/Logout'; // Import the Logout component
 const NavBarBusiness = () => {
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [selectedLocation, setSelectedLocation] = useState('San Jose State University');
     const [profilePicture, setProfilePic] = useState(localStorage.getItem('restaurantProfilePicture') || '');
     const [restaurantName, setRestaurantName] = useState(''); // New state for restaurant name
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
 
     // Base URL for accessing media files (update this to match your backend configuration)
     const mediaBaseURL = 'http://127.0.0.1:8000';
@@ -59,6 +57,7 @@ const NavBarBusiness = () => {
 
     return (
         <>
+        
             {/* Navbar */}
             <nav className="navbar">
                 <div className="navbar-left">
@@ -66,55 +65,11 @@ const NavBarBusiness = () => {
                         <FaBars color="black" />
                     </button>
                     <h2 className="brand-title">
-                        <Link to="/" className="brand-link">Uber Eats</Link>
+                        <Link to="/restaurantdashboard" className="brand-link">Uber Eats Business</Link>
                     </h2>
-                    <div className="delivery-pickup-buttons">
-                        <button className="delivery-btn active">Delivery</button>
-                        <button className="pickup-btn">Pickup</button>
-                    </div>
+                  
                 </div>
 
-                <div className="navbar-right">
-                    <div className="location">
-                        <FaMapMarkerAlt />
-                        <select
-                            value={selectedLocation}
-                            onChange={(e) => setSelectedLocation(e.target.value)}
-                            className="location-dropdown"
-                        >
-                            <option value="San Jose State University">San Jose State University</option>
-                            <option value="San Francisco">San Francisco</option>
-                            <option value="Los Angeles">Los Angeles</option>
-                            <option value="New York">New York</option>
-                            <option value="Chicago">Chicago</option>
-                        </select>
-                    </div>
-                    <div className="search-box">
-                        <input
-                            type="text"
-                            placeholder="Search Uber Eats"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                    </div>
-
-                    {isLoggedIn ? (
-                        <>
-                            <FaShoppingCart className="shopping-cart-icon" />
-                            <img
-                                src={profilePicture}
-                                alt="Profile"
-                                className="navbar-profile-pic"
-                                onClick={() => navigate('/restaurantprofile')}
-                            />
-                        </>
-                    ) : (
-                        <div className="auth-buttons">
-                            <button className="login-button" onClick={() => navigate('/login')}>Log in</button>
-                            <button className="signup-button" onClick={() => navigate('/signup')}>Sign up</button>
-                        </div>
-                    )}
-                </div>
             </nav>
 
             {/* Side Menu for Hamburger */}

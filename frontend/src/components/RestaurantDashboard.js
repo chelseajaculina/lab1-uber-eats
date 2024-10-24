@@ -35,7 +35,7 @@ const RestaurantDashboard = () => {
         </div>
         <div className="promotion-card">
           <h3>Menu</h3>
-          <Link to ="/dishdashboard">  <button className="promotion-button">View Menu</button> </Link>
+          <Link to ="/restaurantmenu">  <button className="promotion-button">View Menu</button> </Link>
         </div>
         <div className="promotion-card">
         <h3>Orders</h3> 

@@ -47,7 +47,7 @@
 .brand-title {
     font-weight: bold;
     font-size: 1.5rem;
-    color: #000; /* White title */
+    color: #000;
 }
 
 .navbar-right {
@@ -75,7 +75,7 @@
 
 /* Sign up Button - Green with White Text */
 .signup-button {
-    background-color: #000;  /* Green background */
+    background-color: #00ff80;  /* Green background */
     color: #fff;                     /* White text */
     border-radius: 5px;              /* Slightly rounded corners */
 }

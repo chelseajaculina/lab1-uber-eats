@@ -1,5 +1,5 @@
 /* Shared container styling for login and signup */
-.signup-container, .login-container {
+.signup-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,7 +9,7 @@
 }
 
 /* Shared header styling for both signup and login */
-.signup-header, .login-header {
+.signup-header {
     background-color: transparent;
     width: 100%;
     text-align: left;
@@ -18,7 +18,7 @@
 
 /* Brand title styling for consistency */
 .brand-title {
-    color: black;
+    color: #000; /* Black color for "Uber" */
     font-size: 24px;
 }
 
@@ -54,14 +54,14 @@
     margin-top: 20px;
 }
 
-.signup-form h2, .login-form h2 {
+.signup-form h2, h2 {
     text-align: center;
     font-size: 18px;
     margin-bottom: 10px;
     color: #333;
 }
 
-.signup-form input, .login-form input {
+.signup-form input,  input {
     width: 100%;
     padding: 12px;
     margin: 8px 0;

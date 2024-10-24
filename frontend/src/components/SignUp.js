@@ -7,33 +7,7 @@ import CustomerSignUp from './CustomerSignUp';
 import RestaurantSignUp from './RestaurantSignUp';
 
 const SignUp = () => {
-    // // const navigate = useNavigate();
-    // const [formData, setFormData] = useState({
-    //     username: '',
-    //     name: '',
-    //     email: '',
-    //     password: ''
-    // });
-
-    // const handleChange = (e) => {
-    //     setFormData({
-    //         ...formData,
-    //         [e.target.name]: e.target.value
-    //     });
-    // };
-
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //         const response = await axios.post('http://localhost:8000/api/customers/signup/', formData);
-    //         console.log('Response from server:', response.data);
-    //         alert('Registration successful');
-    //         navigate('home/');
-    //     } catch (error) {
-    //         console.error('Registration failed:', error);
-    //     }
-    // };
-
+ 
     return (
         <div>
             <div className="signup-header">

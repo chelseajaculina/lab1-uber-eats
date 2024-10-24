@@ -6,18 +6,9 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
 
-# def upload_path(instance, filename):
-#     # Extract the file extension
-#     extension = filename.split('.')[-1]
-    
-#     # Format the new filename with the user's username and original extension
-#     new_filename = f"{instance.username}_logo.{extension}"
-    
-#     # Define the full path to save the file
-#     return '/'.join(['profile_pictures', str(instance.username), new_filename])
-
 def upload_path(instance, filename):
-    return f'profile_pictures/{instance.username}/{filename}'
+    # This function can dynamically create a directory based on the instance properties
+    return f'profile_pictures/{instance.restaurant_name}/{filename}'
 
 # Extend Django's built-in AbstractUser model for restaurant-specific fields
 class Restaurant(AbstractUser):
@@ -63,6 +54,11 @@ class Restaurant(AbstractUser):
         help_text='Specific permissions for this restaurant.',
         verbose_name='user permissions'
     )
+
+# class RestaurantImage(models.Model):
+#     restaurant = models.ForeignKey(Restaurant, related_name='images', on_delete=models.CASCADE)
+#     image = models.ImageField(upload_to='restaurant_images/')
+#     uploaded_at = models.DateTimeField(auto_now_add=True)
 
 # Dish Model to store information about the restaurant's dishes
 class Dish(models.Model):

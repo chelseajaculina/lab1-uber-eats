@@ -3,7 +3,7 @@ import './NavBar.css';
 import axios from 'axios';
 import {
     FaBars, FaMapMarkerAlt, FaShoppingCart,
-    FaRegBookmark, FaUtensils, FaClipboardList, FaLifeRing, FaChartLine, FaConciergeBell, FaGift, FaUsers
+    FaClipboardList, FaLifeRing, FaChartLine, FaConciergeBell, FaGift, FaUsers
 } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import Logout from '../components/Logout'; // Import the Logout component
@@ -12,12 +12,13 @@ const NavBarBusiness = () => {
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState('San Jose State University');
-    const [username, setName] = useState('');
-    const [profilePicture, setProfilePic] = useState(localStorage.getItem('profilePicture') || '');
+    const [profilePicture, setProfilePic] = useState(localStorage.getItem('restaurantProfilePicture') || '');
     const [restaurantName, setRestaurantName] = useState(''); // New state for restaurant name
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [userType, setUserType] = useState(''); // New state to track user type (e.g., 'customer' or 'restaurant')
     const [searchQuery, setSearchQuery] = useState('');
+
+    // Base URL for accessing media files (update this to match your backend configuration)
+    const mediaBaseURL = 'http://127.0.0.1:8000';
 
     // Toggle the side menu
     const toggleMenu = () => {
@@ -31,23 +32,22 @@ const NavBarBusiness = () => {
             setIsLoggedIn(true);
             const fetchUserData = async () => {
                 try {
-                    const response = await axios.get('http://127.0.0.1:8000/api/users/me/', {
+                    const response = await axios.get(`${mediaBaseURL}/api/restaurants/me/`, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
                     });
                     console.log('Fetched data:', response.data);
-                    setName(response.data.name);
-                    setUserType(response.data.user_type); // Get user type from response
 
                     if (response.data.restaurant_name) {
                         setRestaurantName(response.data.restaurant_name); // Set restaurant name from response
                     }
 
                     if (response.data.profile_picture) {
-                        const profilePictureUrl = response.data.profile_picture;
+                        // Construct the full URL for the profile picture
+                        const profilePictureUrl = `${mediaBaseURL}${response.data.profile_picture}`;
                         setProfilePic(profilePictureUrl);
-                        localStorage.setItem('profilePicture', profilePictureUrl); // Persist in localStorage
+                        localStorage.setItem('restaurantProfilePicture', profilePictureUrl); // Persist in localStorage
                     }
                 } catch (error) {
                     console.error('Error fetching user data:', error.response ? error.response.data : error.message);
@@ -55,7 +55,7 @@ const NavBarBusiness = () => {
             };
             fetchUserData();
         }
-    }, []);
+    }, [mediaBaseURL]);
 
     return (
         <>
@@ -99,7 +99,15 @@ const NavBarBusiness = () => {
                     </div>
 
                     {isLoggedIn ? (
-                        <FaShoppingCart className="shopping-cart-icon" />
+                        <>
+                            <FaShoppingCart className="shopping-cart-icon" />
+                            <img
+                                src={profilePicture}
+                                alt="Profile"
+                                className="navbar-profile-pic"
+                                onClick={() => navigate('/restaurantprofile')}
+                            />
+                        </>
                     ) : (
                         <div className="auth-buttons">
                             <button className="login-button" onClick={() => navigate('/login')}>Log in</button>
@@ -115,37 +123,21 @@ const NavBarBusiness = () => {
                     <button className="close-button" onClick={toggleMenu}>✖</button>
 
                     {isLoggedIn ? (
-                        userType === 'customer' ? (
-                            // Customer Side Menu
-                            <div className="user-info">
-                                <img src={profilePicture} alt="User Profile" className="user-profile-pic" />
-                                <h3>Welcome, {username || "Guest"}</h3>
-                                <Link to="/customerprofile" className="manage-account-link">Manage account</Link>
-                                <div className="side-links">
-                                    <Link to="/orders" onClick={toggleMenu}><FaRegBookmark /> Orders</Link>
-                                    <Link to="/favorites" onClick={toggleMenu}><FaClipboardList /> Favorites</Link>
-                                    <Link to="/wallet" onClick={toggleMenu}><FaUtensils /> Wallet</Link>
-                                    <Link to="/help" onClick={toggleMenu}><FaLifeRing /> Help</Link>
-                                </div>
-                                <Logout />
+                        // Restaurant Side Menu
+                        <div className="user-info">
+                            <img src={profilePicture} alt="User Profile" className="user-profile-pic" />
+                            <h3>Welcome, {restaurantName || "Restaurant Owner"}</h3> {/* Display restaurant name */}
+                            <Link to="/restaurantprofile" className="manage-account-link">Manage account</Link>
+                            <div className="side-links">
+                                <Link to="/manage-orders" onClick={toggleMenu}><FaClipboardList /> Manage Orders</Link>
+                                <Link to="/manage-dishes" onClick={toggleMenu}><FaConciergeBell /> Manage Dishes</Link>
+                                <Link to="/restaurant-analytics" onClick={toggleMenu}><FaChartLine /> Analytics</Link>
+                                <Link to="/promotions" onClick={toggleMenu}><FaGift /> Promotions</Link>
+                                <Link to="/help" onClick={toggleMenu}><FaLifeRing /> Help</Link>
+                                <Link to="/staff" onClick={toggleMenu}><FaUsers /> Manage Staff</Link>
                             </div>
-                        ) : (
-                            // Restaurant Side Menu
-                            <div className="user-info">
-                                <img src={profilePicture} alt="User Profile" className="user-profile-pic" />
-                                <h3>Welcome, {restaurantName || "Restaurant Owner"}</h3> {/* Display restaurant name */}
-                                <Link to="/restaurantprofile" className="manage-account-link">Manage account</Link>
-                                <div className="side-links">
-                                    <Link to="/manage-orders" onClick={toggleMenu}><FaClipboardList /> Manage Orders</Link>
-                                    <Link to="/manage-dishes" onClick={toggleMenu}><FaConciergeBell /> Manage Dishes</Link>
-                                    <Link to="/restaurant-analytics" onClick={toggleMenu}><FaChartLine /> Analytics</Link>
-                                    <Link to="/promotions" onClick={toggleMenu}><FaGift /> Promotions</Link>
-                                    <Link to="/help" onClick={toggleMenu}><FaLifeRing /> Help</Link>
-                                    <Link to="/staff" onClick={toggleMenu}><FaUsers /> Manage Staff</Link>
-                                </div>
-                                <Logout />
-                            </div>
-                        )
+                            <Logout />
+                        </div>
                     ) : (
                         // Menu for Guests (Not Logged In)
                         <>

@@ -8,12 +8,12 @@ class RestaurantProfile extends Component {
         super(props);
         this.state = {
             restaurant: {
-                name: localStorage.getItem('restaurantName') || '',
-                location: localStorage.getItem('restaurantLocation') || '',
-                description: localStorage.getItem('restaurantDescription') || '',
-                email: localStorage.getItem('restaurantEmail') || '',
-                phone: localStorage.getItem('restaurantPhone') || '',
-                contact_info: localStorage.getItem('restaurantContactInfo') || '',
+                restaurant_name: '',
+                location: '',
+                description: '',
+                contact_info: '',
+                email: '',
+                timings: '',
                 profilePicture: localStorage.getItem('restaurantProfilePicture') || ''
             },
             authToken: localStorage.getItem('access_token'),
@@ -51,18 +51,18 @@ class RestaurantProfile extends Component {
             // Save to state and local storage for persistence
             this.setState({
                 restaurant: {
-                    ...restaurantData,
-                    // profilePicture: restaurantData.profile_picture ? `${this.mediaBaseURL}${restaurantData.profile_picture}` : ''
+                    restaurant_name: restaurantData.restaurant_name || '',
+                    location: restaurantData.location || '',
+                    description: restaurantData.description || '',
+                    contact_info: restaurantData.contact_info || '',
+                    email: restaurantData.email || '',
+                    timings: restaurantData.timings || '',
+                    profilePicture: restaurantData.profile_picture ? `${this.mediaBaseURL}${restaurantData.profile_picture}` : ''
                 },
                 previewProfilePicture: restaurantData.profile_picture ? `${this.mediaBaseURL}${restaurantData.profile_picture}` : ''
             });
 
-            localStorage.setItem('restaurantName', restaurantData.name || '');
-            localStorage.setItem('restaurantLocation', restaurantData.location || '');
-            localStorage.setItem('restaurantDescription', restaurantData.description || '');
-            localStorage.setItem('restaurantEmail', restaurantData.email || '');
-            localStorage.setItem('restaurantPhone', restaurantData.phone || '');
-            localStorage.setItem('restaurantContactInfo', restaurantData.contact_info || '');
+            // Store profile picture in localStorage
             if (restaurantData.profile_picture) {
                 localStorage.setItem('restaurantProfilePicture', `${this.mediaBaseURL}${restaurantData.profile_picture}`);
             }
@@ -87,9 +87,6 @@ class RestaurantProfile extends Component {
                 [name]: value
             }
         }));
-
-        // Update local storage to maintain the data across refreshes
-        localStorage.setItem(`restaurant${name.charAt(0).toUpperCase() + name.slice(1)}`, value);
     };
 
     handleProfilePictureChange = (e) => {
@@ -100,6 +97,35 @@ class RestaurantProfile extends Component {
             this.setState({ previewProfilePicture: previewUrl });
         } else {
             console.error("No file selected");
+        }
+    };
+
+    handleProfilePictureUpload = async () => {
+        const formData = new FormData();
+        if (this.state.selectedProfilePicture instanceof File) {
+            formData.append('profile_picture', this.state.selectedProfilePicture);
+
+            try {
+                const response = await axios.post('http://localhost:8000/api/restaurants/upload-profile-picture/', formData, {
+                    headers: {
+                        Authorization: `Bearer ${this.state.authToken}`,
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+
+                if (response.data.profilePicture) {
+                    const updatedProfilePicture = response.data.profilePicture;
+                    localStorage.setItem('restaurantProfilePicture', updatedProfilePicture);
+                    this.setState({
+                        restaurant: { ...this.state.restaurant, profilePicture: updatedProfilePicture },
+                        previewProfilePicture: updatedProfilePicture
+                    });
+                    alert('Profile picture updated successfully');
+                }
+            } catch (error) {
+                console.error('Error updating profile picture:', error);
+                alert(`Error: ${error.message}`);
+            }
         }
     };
 
@@ -115,11 +141,6 @@ class RestaurantProfile extends Component {
             }
         });
 
-        // Append profile picture only if it has been changed
-        if (this.state.selectedProfilePicture instanceof File) {
-            formData.append('profile_picture', this.state.selectedProfilePicture);
-        }
-
         try {
             // Send the patch request to update the restaurant profile
             const response = await axios.patch('http://localhost:8000/api/restaurants/update/', formData, {
@@ -129,40 +150,23 @@ class RestaurantProfile extends Component {
                 }
             });
 
-            // Update state and local storage if profile picture is changed
-            if (response.data.profile_picture) {
-                const updatedProfilePicture = `${this.mediaBaseURL}${response.data.profile_picture}?timestamp=${new Date().getTime()}`;
-                localStorage.setItem('restaurantProfilePicture', updatedProfilePicture);
-                this.setState({
-                    restaurant: { ...this.state.restaurant, profilePicture: updatedProfilePicture },
-                    previewProfilePicture: updatedProfilePicture
-                });
-            }
-
             // Update the rest of the restaurant fields in the state and local storage
-            this.setState(prevState => {
-                const updatedRestaurant = {
+            this.setState(prevState => ({
+                restaurant: {
                     ...prevState.restaurant,
-                    name: response.data.name,
+                    restaurant_name: response.data.restaurant_name,
                     location: response.data.location,
                     description: response.data.description,
+                    contact_info: response.data.contact_info,
                     email: response.data.email,
-                    phone: response.data.phone,
-                    contact_info: response.data.contact_info
-                };
-                
-                // Update local storage with the new values
-                localStorage.setItem('restaurantName', updatedRestaurant.name);
-                localStorage.setItem('restaurantLocation', updatedRestaurant.location);
-                localStorage.setItem('restaurantDescription', updatedRestaurant.description);
-                localStorage.setItem('restaurantEmail', updatedRestaurant.email);
-                localStorage.setItem('restaurantPhone', updatedRestaurant.phone);
-                localStorage.setItem('restaurantContactInfo', updatedRestaurant.contact_info);
+                    timings: response.data.timings,
+                    profilePicture: response.data.profile_picture,
+                }
+            }));
 
-                return {
-                    restaurant: updatedRestaurant
-                };
-            });
+            if (response.data.profile_picture) {
+                localStorage.setItem('restaurantProfilePicture', response.data.profile_picture);
+            }
 
             alert('Profile updated successfully');
         } catch (error) {
@@ -175,7 +179,10 @@ class RestaurantProfile extends Component {
         return (
             <div className="dashboard-container">
                 <aside className="sidebar">
-                    <Link to="/home"><h2>Uber Restaurant Account</h2></Link>
+                    <Link to="/restaurantdashboard"><h2>Uber Restaurant Account</h2></Link>
+                    <div>
+                                <img src={this.state.previewProfilePicture} alt="Current Profile" className="profile-picture" />
+                    </div>
                     <ul>
                         <li className="active">Account Info</li>
                         <li>Menu Management</li>
@@ -202,12 +209,14 @@ class RestaurantProfile extends Component {
                             onChange={this.handleProfilePictureChange}
                             accept=".png,.jpg,.jpeg,.gif"
                         />
+                        <button onClick={this.handleProfilePictureUpload} className="profile-picture-btn">
+                            Update Profile Picture
+                        </button>
                     </div>
-
                     <form onSubmit={this.handleSubmit}>
                         <div>
                             <label>Restaurant Name:</label>
-                            <input type="text" name="name" value={this.state.restaurant.name} onChange={this.handleInputChange} placeholder="Enter Restaurant Name" />
+                            <input type="text" name="restaurant_name" value={this.state.restaurant.restaurant_name} onChange={this.handleInputChange} placeholder="Enter Restaurant Name" />
                         </div>
                         <div>
                             <label>Location:</label>
@@ -224,6 +233,10 @@ class RestaurantProfile extends Component {
                         <div>
                             <label>Contact Info:</label>
                             <input type="text" name="contact_info" value={this.state.restaurant.contact_info} onChange={this.handleInputChange} placeholder="Enter Contact Info" />
+                        </div>
+                        <div>
+                            <label>Timings:</label>
+                            <input type="text" name="timings" value={this.state.restaurant.timings || ''} onChange={this.handleInputChange} placeholder="Enter Restaurant Timings" />
                         </div>
                         <button type="submit">Update Profile</button>
                     </form>

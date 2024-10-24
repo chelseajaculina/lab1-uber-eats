@@ -1,6 +1,16 @@
 from django.urls import path
-from .views import RestaurantSignUpView, GetRestaurantDataView, DishListCreateView, DishDetailView, UpdateRestaurantProfileView, UploadRestaurantProfilePictureView, RestaurantLoginView, GetProfilePictureView
-from .views import RestaurantSignUpView
+from .views import (
+    RestaurantSignUpView, 
+    GetRestaurantDataView, 
+    DishListCreateView, 
+    DishDetailView,
+    RestaurantProfileView, 
+    UploadRestaurantProfilePictureView,
+    RestaurantLoginView,
+    GetProfilePictureView
+)
+
+
 from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
@@ -9,12 +19,12 @@ urlpatterns = [
     path('login/', RestaurantLoginView.as_view(), name='restaurant_token_obtain_pair'),
 
     # Restaurant profile management
-    path('profile/', GetRestaurantDataView.as_view(), name='restaurant-profile'),
+    path('me/', GetRestaurantDataView.as_view(), name='restaurant-profile'),
 
-    path('update/', UpdateRestaurantProfileView.as_view(), name='restaurant-profile-update'),
+    path('update/', RestaurantProfileView.as_view(), name='restaurant-profile-update'),
     path('upload-profile-picture/', UploadRestaurantProfilePictureView.as_view(), name='restaurant-profile-upload'),
 
-    path('get-profile-picture/', GetProfilePictureView.as_view(), name='restaurant-profile-upload'),
+    path('profile-picture/', GetProfilePictureView.as_view(), name='restaurant-profile-upload'),
 
     # Dish management
     path('dishes/', DishListCreateView.as_view(), name='dish-list-create'),

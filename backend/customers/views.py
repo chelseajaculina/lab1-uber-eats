@@ -13,8 +13,6 @@ from rest_framework.response import Response
 from rest_framework import permissions, status
 
 
-
-
 # api view for signup 
 class CustomerSignUpView(generics.CreateAPIView):
     queryset = Customer.objects.all()

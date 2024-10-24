@@ -58,10 +58,10 @@ class RestaurantSerializer(serializers.ModelSerializer):
     #         raise serializers.ValidationError("This email is already registered. Please use a different email.")
     #     return value
 
-    def validate_username(self, value):
-        if Restaurant.objects.filter(username=value).exists():
-            raise serializers.ValidationError("This username is already taken. Please choose another one.")
-        return value
+    # def validate_username(self, value):
+    #     if Restaurant.objects.filter(username=value).exists():
+    #         raise serializers.ValidationError("This username is already taken. Please choose another one.")
+    #     return value
 
     def validate_profile_picture(self, value):
         # Check that the file is an image, if needed

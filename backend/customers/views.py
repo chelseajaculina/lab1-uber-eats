@@ -220,4 +220,20 @@ class UpdateProfileView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+from rest_framework import generics, permissions
+from .models import Restaurant, MenuItem
+from .serializers import RestaurantSerializer, MenuItemSerializer
+class RestaurantListView(generics.ListAPIView):
+    queryset = Restaurant.objects.all()
+    serializer_class = RestaurantSerializer
+    permission_classes = [permissions.AllowAny]
+
+# Get menu items for a specific restaurant
+class MenuItemListView(generics.ListAPIView):
+    serializer_class = MenuItemSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        restaurant_name = self.kwargs['restaurant_name']
+        return MenuItem.objects.filter(restaurant__name__iexact=restaurant_name)
 

@@ -17,6 +17,11 @@ import RestaurantDashboard from './components/RestaurantDashboard';
 import RestaurantProfile from './components/RestaurantProfile';
 import DishDashboard from './components/DishDashboard';
 import OrdersManagement from './components/OrdersManagement';
+import Wingstop from './components/brands/Wingstop';
+import PandaExpress from './components/brands/PandaExpress';
+import McDonalds from './components/brands/McDonalds';
+import JackInTheBox from './components/brands/JackInTheBox';
+import TacoBell from './components/brands/TacoBell';
                                                                                                                                                                                                                                           
 
 
@@ -65,6 +70,13 @@ const App = () => {
                     <Route path="/welcome" element={<Welcome />} />
                     <Route path="/customerprofile" element={isAuthenticated ? <CustomerProfile/> : <Navigate to="/customerprofile" />} />
                     <Route path="/restauranttab" element={<RestaurantTab />} />
+
+                    <Route path="/" element={<Home />} />
+                    <Route path="/brands/wingstop" element={<Wingstop />} /> {/* Wingstop page */}
+                    <Route path="/brands/panda-express" element={<PandaExpress />} /> {/* Wingstop page */}
+                    <Route path="/brands/mcdonalds" element={<McDonalds />} />
+                    <Route path="/brands/jack-in-the-box" element={<JackInTheBox />} />
+                    <Route path="/brands/taco-bell" element={<TacoBell />} />
                     {/* Add other routes here */}
                 </Routes>
             </MainLayout>

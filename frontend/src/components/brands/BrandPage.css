@@ -1,0 +1,33 @@
+/* src/components/brands/BrandPage.css */
+
+.brand-page-container {
+    padding: 20px;
+}
+
+.brand-banner img {
+    width: 100%;
+    height: auto;
+}
+
+.menu-items {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.menu-item {
+    width: calc(33% - 20px);
+    margin: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    text-align: center;
+}
+
+.menu-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.menu-item h3 {
+    margin-top: 10px;
+}

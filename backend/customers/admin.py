@@ -2,8 +2,10 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib import admin
-from .models import Customer
+from .models import Customer, Restaurant, MenuItem
 
+admin.site.register(Restaurant)
+admin.site.register(MenuItem)
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('username', 'name', 'email', 'is_active', 'date_joined')

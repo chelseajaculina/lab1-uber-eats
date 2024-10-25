@@ -94,9 +94,15 @@ class DishSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dish
         fields = ['id', 'restaurant', 'name', 'ingredients', 'image', 'price', 'description', 'category']
+        read_only_fields = ['restaurant']
 
     def create(self, validated_data):
-        return Dish.objects.create(**validated_data)
+        # Remove 'restaurant' from validated_data since we're passing it separately
+        restaurant = self.context['request'].user
+        validated_data.pop('restaurant', None)  # Remove the restaurant field from validated_data if it exists
+        return Dish.objects.create(restaurant=restaurant, **validated_data)
+
+
 
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer

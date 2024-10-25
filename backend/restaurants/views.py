@@ -138,20 +138,39 @@ class GetProfilePictureView(APIView):
         return Response({'profilePicture': profile_picture_url}, status=status.HTTP_200_OK)
 
 # Dish Management Views
+from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Dish, Restaurant
+from .serializers import DishSerializer
+from rest_framework.permissions import IsAuthenticated
+
 class DishListCreateView(APIView):
+    parser_classes = [MultiPartParser, FormParser]
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        dishes = Dish.objects.filter(restaurant=request.user)
-        serializer = DishSerializer(dishes, many=True)
-        return Response(serializer.data)
+        if request.user.user_type == 'restaurant':
+            dishes = Dish.objects.filter(restaurant=request.user)
+            serializer = DishSerializer(dishes, many=True)
+            return Response(serializer.data)
+        return Response({"detail": "You are not authorized to view this resource."}, status=status.HTTP_403_FORBIDDEN)
 
     def post(self, request):
-        serializer = DishSerializer(data=request.data)
+        # Copy the request data to modify it
+        data = request.data.copy()
+        data['restaurant'] = request.user.id  # Automatically assign the authenticated restaurant
+        
+        # Pass the request context to the serializer
+        serializer = DishSerializer(data=data, context={'request': request})
+        
         if serializer.is_valid():
             serializer.save(restaurant=request.user)
-            return Response({"message": "Dish added successfully!"}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            print(serializer.errors)  # Log the errors for debugging
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DishDetailView(APIView):
     permission_classes = [IsAuthenticated]

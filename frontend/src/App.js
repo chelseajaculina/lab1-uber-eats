@@ -15,7 +15,6 @@ import CustomerSignUp from './components/CustomerSignUp';
 import Favorites from './components/Favorites';
 import RestaurantDashboard from './components/RestaurantDashboard';
 import RestaurantProfile from './components/RestaurantProfile';
-import DishDashboard from './components/DishForm';
 import OrdersManagement from './components/OrdersManagement';
 import Wingstop from './components/brands/Wingstop';
 import PandaExpress from './components/brands/PandaExpress';
@@ -57,7 +56,7 @@ const App = () => {
                     <Route path="/restaurantprofile" element={isAuthenticated ? <RestaurantProfile/> : <Navigate to="/restaurantprofile" />} />
 
 
-                    <Route path="/dishdashboard" element={<DishDashboard />} />
+
                     <Route path="/restaurantmenu" element={<RestaurantMenu/>} />
 
                     <Route path="/orders" element={<OrdersManagement />} />

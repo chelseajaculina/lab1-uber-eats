@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './RestaurantMenu.css'; // Import CSS for styling
 import NavBarBusiness from './NavBarBusiness';
 import axios from 'axios'; // Import axios to handle HTTP requests
 
 const RestaurantMenu = () => {
   const [showModal, setShowModal] = useState(false); // Control modal visibility
+  const [dishes, setDishes] = useState([]); // State to hold the list of dishes
   const [dishData, setDishData] = useState({
     name: '',
     price: '',
@@ -16,15 +17,47 @@ const RestaurantMenu = () => {
   });
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
+  // Fetch dishes on component mount
+  useEffect(() => {
+    fetchDishes();
+  }, []);
+
+  // Function to fetch dishes from the backend
+  const fetchDishes = async () => {
+    try {
+      const token = localStorage.getItem('access_token');
+      const response = await axios.get('http://localhost:8000/api/restaurants/dishes/', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      setDishes(response.data); // Set fetched dishes to state
+    } catch (err) {
+      console.error('Error fetching dishes:', err);
+    }
+  };
+
+  // Open modal for adding a dish
   const handleOpenModal = () => {
     setShowModal(true);
   };
 
+  // Close modal and reset form states
   const handleCloseModal = () => {
     setShowModal(false);
     setSuccessMessage('');
     setErrorMessage('');
+    setDishData({
+      name: '',
+      price: '',
+      category: 'Appetizer',
+      type: 'Veg',
+      ingredients: '',
+      description: '',
+      image: null,
+    });
   };
 
   // Handle form input changes
@@ -46,6 +79,7 @@ const RestaurantMenu = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // Set loading state
 
     // Create FormData to send the image and other form data
     const formData = new FormData();
@@ -60,17 +94,25 @@ const RestaurantMenu = () => {
     }
 
     try {
-      // Make POST request to Django backend
-      const response = await axios.post('http://localhost:8000/api/dishes/', formData, {
+      // Get token from localStorage for authentication
+      const token = localStorage.getItem('access_token');
+
+      // Make POST request to Django backend (API: /api/restaurants/dishes/)
+      const response = await axios.post('http://localhost:8000/api/restaurants/dishes/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`, // Authorization header with JWT token
         },
       });
+
       setSuccessMessage('Dish added successfully!');
       setErrorMessage('');
       handleCloseModal(); // Close modal after success
+      fetchDishes(); // Re-fetch dishes to display the newly added dish
     } catch (err) {
       setErrorMessage('Failed to add dish. Please try again.');
+    } finally {
+      setIsLoading(false); // Stop loading
     }
   };
 
@@ -88,6 +130,26 @@ const RestaurantMenu = () => {
         </button>
       </div>
 
+      {/* Display dishes */}
+      <div className="dishes-list">
+        {dishes.length > 0 ? (
+          dishes.map((dish) => (
+            <div key={dish.id} className="dish-card">
+              <img
+                src={`http://localhost:8000${dish.image}`}
+                alt={dish.name}
+                className="dish-image"
+              />
+              <h3>{dish.name}</h3>
+              <p>{dish.description}</p>
+              <p><strong>Price:</strong> ${dish.price}</p>
+            </div>
+          ))
+        ) : (
+          <p>No dishes available</p>
+        )}
+      </div>
+
       {/* Modal for Adding New Dish */}
       {showModal && (
         <div className="modal-overlay">
@@ -95,7 +157,7 @@ const RestaurantMenu = () => {
             <h2>Add a New Dish</h2>
             <form className="dish-form" onSubmit={handleSubmit}>
               <div>
-                <label>Name:</label>
+                <label>Dish Name:</label>
                 <input
                   type="text"
                   name="name"
@@ -104,6 +166,23 @@ const RestaurantMenu = () => {
                   placeholder="Enter dish name"
                   required
                 />
+              </div>
+
+              <div>
+                <label>Ingredients:</label>
+                <input
+                  type="text"
+                  name="ingredients"
+                  value={dishData.ingredients}
+                  onChange={handleChange}
+                  placeholder="Enter ingredients"
+                  required
+                />
+              </div>
+
+              <div>
+                <label>Add dish image:</label>
+                <input type="file" name="image" onChange={handleImageChange} />
               </div>
 
               <div>
@@ -122,35 +201,6 @@ const RestaurantMenu = () => {
               </div>
 
               <div>
-                <label>Select category:</label>
-                <select name="category" value={dishData.category} onChange={handleChange}>
-                  <option value="Appetizer">Appetizer</option>
-                  <option value="Main Course">Main Course</option>
-                  <option value="Dessert">Dessert</option>
-                </select>
-              </div>
-
-              <div>
-                <label>Select type:</label>
-                <select name="type" value={dishData.type} onChange={handleChange}>
-                  <option value="Veg">Veg</option>
-                  <option value="Non-Veg">Non-Veg</option>
-                </select>
-              </div>
-
-              <div>
-                <label>Ingredients:</label>
-                <input
-                  type="text"
-                  name="ingredients"
-                  value={dishData.ingredients}
-                  onChange={handleChange}
-                  placeholder="Enter ingredients"
-                  required
-                />
-              </div>
-
-              <div>
                 <label>Description:</label>
                 <textarea
                   name="description"
@@ -161,12 +211,20 @@ const RestaurantMenu = () => {
               </div>
 
               <div>
-                <label>Add dish image:</label>
-                <input type="file" name="image" onChange={handleImageChange} />
+                <label>Select category:</label>
+                <select name="category" value={dishData.category} onChange={handleChange}>
+                  <option value="Appetizer">Appetizer</option>
+                  <option value="Main Course">Main Course</option>
+                  <option value="Dessert">Dessert</option>
+                </select>
               </div>
 
+              {/* Error and Success Messages */}
               {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
               {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+
+              {/* Loading indicator */}
+              {isLoading && <p>Loading...</p>}
 
               <div className="form-buttons">
                 <button type="submit" className="save-button">

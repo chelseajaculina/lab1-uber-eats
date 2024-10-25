@@ -16,11 +16,9 @@ import Favorites from './components/Favorites';
 import RestaurantDashboard from './components/RestaurantDashboard';
 import RestaurantProfile from './components/RestaurantProfile';
 import OrdersManagement from './components/OrdersManagement';
-import Wingstop from './components/brands/Wingstop';
 import PandaExpress from './components/brands/PandaExpress';
 import RestaurantMenu from './components/RestaurantMenu';
-                                                                                                                                                                                                                                          
-
+import RestaurantPage from './components/RestaurantPage';
 
 const App = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -38,54 +36,46 @@ const App = () => {
         <Router>
             <MainLayout>
                 <Routes>
-                    <Route path="/" element={<Welcome/>} />
-                    <Route path="/home" element= {<Home />} /> 
+                    {/* Public Routes */}
+                    <Route path="/" element={<Welcome />} />
+                    <Route path="/home" element={<Home />} />
                     <Route path="/login" element={<Login />} />
-
-
+                    <Route path="/signup" element={<SignUp />} />
+                    
+                    {/* Customer Routes */}
                     <Route path="customer/signup" element={<CustomerSignUp />} />
                     <Route path="customer/login" element={<CustomerLogin />} />
+                    <Route path="/favorites" element={isAuthenticated ? <Favorites /> : <Navigate to="/login" />} />
+                    <Route path="/customerprofile" element={isAuthenticated ? <CustomerProfile /> : <Navigate to="/login" />} />
 
-                    <Route path="/signup" element={<SignUp />} />
-
-
+                    {/* Restaurant Routes */}
                     <Route path="restaurant/signup" element={<RestaurantSignUp />} />
-                    <Route path="restaurant/login" element={<RestaurantLogin/>} />
-
-                    <Route path = "/restaurantdashboard" element={<RestaurantDashboard />} />
-                    <Route path="/restaurantprofile" element={isAuthenticated ? <RestaurantProfile/> : <Navigate to="/restaurantprofile" />} />
-
-
-
-                    <Route path="/restaurantmenu" element={<RestaurantMenu/>} />
-
-                    <Route path="/orders" element={<OrdersManagement />} />
-
-
-                    <Route path="/favorites" element={<Favorites />} />
-
-                    <Route path="/logout" element={<Logout/>} />
-                    <Route path="/welcome" element={<Welcome />} />
-                    <Route path="/customerprofile" element={isAuthenticated ? <CustomerProfile/> : <Navigate to="/customerprofile" />} />
+                    <Route path="restaurant/login" element={<RestaurantLogin />} />
+                    <Route path="/restaurantdashboard" element={isAuthenticated ? <RestaurantDashboard /> : <Navigate to="/restaurant/login" />} />
+                    <Route path="/restaurantprofile" element={isAuthenticated ? <RestaurantProfile /> : <Navigate to="/restaurant/login" />} />
+                    <Route path="/restaurantmenu" element={isAuthenticated ? <RestaurantMenu /> : <Navigate to="/restaurant/login" />} />
+                    <Route path="/orders" element={isAuthenticated ? <OrdersManagement /> : <Navigate to="/restaurant/login" />} />
                     <Route path="/restauranttab" element={<RestaurantTab />} />
+                    
+                    {/* Dynamic Brand Routes */}
+                    <Route path="/brands/:restaurantName" element={<RestaurantPage />} />
+                    
+                    {/* Miscellaneous Routes */}
+                    <Route path="/logout" element={<Logout />} />
+                    <Route path="/welcome" element={<Welcome />} />
 
-
-                    <Route path="/brands/wingstop" element={<Wingstop />} /> {/* Wingstop page */}
-                    <Route path="/brands/panda-express " element={<PandaExpress />} /> {/* Wingstop page */}
-
-                    {/* Add other routes here */}
+                    {/* Example for static brand page */}
+                    <Route path="/brands/panda-express" element={<PandaExpress />} />
                 </Routes>
             </MainLayout>
         </Router>
     );
 };
 
-
 const MainLayout = ({ children }) => (
     <div>
         {children}
     </div>
 );
-
 
 export default App;

@@ -60,6 +60,11 @@ class Restaurant(AbstractUser):
         verbose_name='user permissions'
     )
 
+    def save(self, *args, **kwargs):
+        # Convert restaurant_name to lowercase before saving to the database
+        self.restaurant_name = self.restaurant_name.lower()
+        super(Restaurant, self).save(*args, **kwargs)
+
 # class RestaurantImage(models.Model):
 #     restaurant = models.ForeignKey(Restaurant, related_name='images', on_delete=models.CASCADE)
 #     image = models.ImageField(upload_to='restaurant_images/')

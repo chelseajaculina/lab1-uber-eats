@@ -129,3 +129,5 @@ class RestaurantTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         print("Authentication successful")  # Debugging information
         return super().validate(attrs)
+    
+

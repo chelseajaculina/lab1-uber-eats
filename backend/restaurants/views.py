@@ -146,31 +146,30 @@ from .models import Dish, Restaurant
 from .serializers import DishSerializer
 from rest_framework.permissions import IsAuthenticated
 
+from rest_framework.parsers import MultiPartParser, FormParser
+
 class DishListCreateView(APIView):
-    parser_classes = [MultiPartParser, FormParser]
-    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]  # Handle file uploads
 
     def get(self, request):
-        if request.user.user_type == 'restaurant':
+        # Get dishes related to the authenticated restaurant
+        if request.user.user_type == 'restaurant':  # Assuming 'user_type' distinguishes restaurant users
             dishes = Dish.objects.filter(restaurant=request.user)
             serializer = DishSerializer(dishes, many=True)
             return Response(serializer.data)
         return Response({"detail": "You are not authorized to view this resource."}, status=status.HTTP_403_FORBIDDEN)
 
     def post(self, request):
-        # Copy the request data to modify it
-        data = request.data.copy()
-        data['restaurant'] = request.user.id  # Automatically assign the authenticated restaurant
-        
-        # Pass the request context to the serializer
-        serializer = DishSerializer(data=data, context={'request': request})
-        
-        if serializer.is_valid():
-            serializer.save(restaurant=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            print(serializer.errors)  # Log the errors for debugging
+        if request.user.user_type == 'restaurant':
+            data = request.data.copy()
+            data['restaurant'] = request.user.id  # Assign restaurant as current user
+
+            serializer = DishSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save(restaurant=request.user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"detail": "You are not authorized to add a dish."}, status=status.HTTP_403_FORBIDDEN)
 
 class DishDetailView(APIView):
     permission_classes = [IsAuthenticated]
@@ -183,6 +182,7 @@ class DishDetailView(APIView):
         except Dish.DoesNotExist:
             return Response({"error": "Dish not found"}, status=status.HTTP_404_NOT_FOUND)
 
+    
     def put(self, request, dish_id):
         try:
             dish = Dish.objects.get(id=dish_id, restaurant=request.user)
@@ -190,9 +190,12 @@ class DishDetailView(APIView):
             if serializer.is_valid():
                 serializer.save()
                 return Response({"message": "Dish updated successfully!"}, status=status.HTTP_200_OK)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                print(serializer.errors)  # Log errors to debug
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Dish.DoesNotExist:
             return Response({"error": "Dish not found"}, status=status.HTTP_404_NOT_FOUND)
+
 
     def delete(self, request, dish_id):
         try:
@@ -201,6 +204,7 @@ class DishDetailView(APIView):
             return Response({"message": "Dish deleted successfully!"}, status=status.HTTP_200_OK)
         except Dish.DoesNotExist:
             return Response({"error": "Dish not found"}, status=status.HTTP_404_NOT_FOUND)
+
 
 # Custom Token Refresh View for Restaurant
 class CustomTokenRefreshView(TokenRefreshView):
@@ -229,3 +233,41 @@ class RestaurantViewSet(viewsets.ModelViewSet):
 class DishViewSet(viewsets.ModelViewSet):
     queryset = Dish.objects.all()
     serializer_class = DishSerializer
+
+
+from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Restaurant, Dish
+from .serializers import RestaurantSerializer, DishSerializer
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.shortcuts import get_object_or_404
+from .models import Restaurant, Dish
+from .serializers import RestaurantSerializer, DishSerializer
+
+class RestaurantDetailView(APIView):
+    def get(self, request, restaurant_name):
+        # Convert restaurant_name to lowercase to match in the database (if you are storing names in lowercase)
+        restaurant_name = restaurant_name.lower()
+
+        # Fetch the restaurant object by name (case-insensitive search)
+        restaurant = get_object_or_404(Restaurant, restaurant_name__iexact=restaurant_name)
+
+        # Serialize the restaurant data
+        restaurant_serializer = RestaurantSerializer(restaurant)
+
+        # Fetch all dishes related to this restaurant
+        dishes = Dish.objects.filter(restaurant=restaurant)
+        dish_serializer = DishSerializer(dishes, many=True)
+
+        # Return the serialized restaurant data along with the list of dishes
+        return Response({
+            'restaurant': restaurant_serializer.data,
+            'dishes': dish_serializer.data
+        }, status=status.HTTP_200_OK)
+
+ 

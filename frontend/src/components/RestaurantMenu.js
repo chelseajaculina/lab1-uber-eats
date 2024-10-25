@@ -6,6 +6,7 @@ import axios from 'axios'; // Import axios to handle HTTP requests
 const RestaurantMenu = () => {
   const [showModal, setShowModal] = useState(false); // Control modal visibility
   const [dishes, setDishes] = useState([]); // State to hold the list of dishes
+  const [editingDishId, setEditingDishId] = useState(null); // Track which dish is being edited
   const [dishData, setDishData] = useState({
     name: '',
     price: '',
@@ -30,7 +31,7 @@ const RestaurantMenu = () => {
       const token = localStorage.getItem('access_token');
       const response = await axios.get('http://localhost:8000/api/restaurants/dishes/', {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       setDishes(response.data); // Set fetched dishes to state
@@ -39,9 +40,34 @@ const RestaurantMenu = () => {
     }
   };
 
-  // Open modal for adding a dish
-  const handleOpenModal = () => {
-    setShowModal(true);
+  // Open modal for adding or editing a dish
+  const handleOpenModal = (dish = null) => {
+    if (dish) {
+      // If editing, populate form with dish data
+      setEditingDishId(dish.id);  // Track which dish is being edited
+      setDishData({
+        name: dish.name,
+        price: dish.price,
+        category: dish.category,
+        type: dish.type,
+        ingredients: dish.ingredients,
+        description: dish.description,
+        image: dish.image,
+      });
+    } else {
+      // If adding a new dish, reset form
+      setEditingDishId(null); // Not editing, it's a new dish
+      setDishData({
+        name: '',
+        price: '',
+        category: 'Appetizer',
+        type: 'Veg',
+        ingredients: '',
+        description: '',
+        image: null,
+      });
+    }
+    setShowModal(true); // Show the modal
   };
 
   // Close modal and reset form states
@@ -69,14 +95,15 @@ const RestaurantMenu = () => {
   };
 
   // Handle image change
-  const handleImageChange = (e) => {
+// Handle image change
+const handleImageChange = (e) => {
     setDishData({
       ...dishData,
       image: e.target.files[0], // Set the image file
     });
   };
-
-  // Handle form submission
+  
+  // Handle form submission for adding or editing a dish
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true); // Set loading state
@@ -94,23 +121,32 @@ const RestaurantMenu = () => {
     }
 
     try {
-      // Get token from localStorage for authentication
       const token = localStorage.getItem('access_token');
 
-      // Make POST request to Django backend (API: /api/restaurants/dishes/)
-      const response = await axios.post('http://localhost:8000/api/restaurants/dishes/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}`, // Authorization header with JWT token
-        },
-      });
+      if (editingDishId) {
+        // Update an existing dish with PUT request
+        await axios.put(`http://localhost:8000/api/restaurants/dishes/${editingDishId}/`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setSuccessMessage('Dish updated successfully!');
+      } else {
+        // Add a new dish with POST request
+        await axios.post('http://localhost:8000/api/restaurants/dishes/', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setSuccessMessage('Dish added successfully!');
+      }
 
-      setSuccessMessage('Dish added successfully!');
-      setErrorMessage('');
       handleCloseModal(); // Close modal after success
-      fetchDishes(); // Re-fetch dishes to display the newly added dish
+      fetchDishes(); // Re-fetch dishes to display the newly added or updated dish
     } catch (err) {
-      setErrorMessage('Failed to add dish. Please try again.');
+      setErrorMessage('Failed to save dish. Please try again.');
     } finally {
       setIsLoading(false); // Stop loading
     }
@@ -118,19 +154,18 @@ const RestaurantMenu = () => {
 
   return (
     <div className="restaurant-menu">
-      {/* Header with Uber Eats logo and logout button */}
       <NavBarBusiness />
 
       <h2 className="menu-title">Menu</h2>
 
       {/* Add Dish Button */}
       <div className="add-dish-section">
-        <button className="add-dish-button" onClick={handleOpenModal}>
+        <button className="add-dish-button" onClick={() => handleOpenModal()}>
           Add a new dish
         </button>
       </div>
 
-      {/* Display dishes */}
+      {/* Display dishes with Edit button */}
       <div className="dishes-list">
         {dishes.length > 0 ? (
           dishes.map((dish) => (
@@ -143,6 +178,9 @@ const RestaurantMenu = () => {
               <h3>{dish.name}</h3>
               <p>{dish.description}</p>
               <p><strong>Price:</strong> ${dish.price}</p>
+              <button className="edit-button" onClick={() => handleOpenModal(dish)}>
+                Edit
+              </button>
             </div>
           ))
         ) : (
@@ -150,11 +188,11 @@ const RestaurantMenu = () => {
         )}
       </div>
 
-      {/* Modal for Adding New Dish */}
+      {/* Modal for Adding/Editing Dish */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h2>Add a New Dish</h2>
+            <h2>{editingDishId ? 'Update Dish Information' : 'Add a New Dish'}</h2>
             <form className="dish-form" onSubmit={handleSubmit}>
               <div>
                 <label>Dish Name:</label>
@@ -219,11 +257,9 @@ const RestaurantMenu = () => {
                 </select>
               </div>
 
-              {/* Error and Success Messages */}
               {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
               {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
 
-              {/* Loading indicator */}
               {isLoading && <p>Loading...</p>}
 
               <div className="form-buttons">

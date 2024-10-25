@@ -185,7 +185,7 @@ class RestaurantProfile extends Component {
                     </div>
                     <ul>
                         <li className="active">Account Info</li>
-                        <li>Menu Management</li>
+                        <Link to="/restaurantmenu"><li>Menu Management</li> </Link>
                         <li>Orders Management</li>
                         <li>Analytics</li>
                     </ul>

@@ -10,7 +10,8 @@ from .views import (
     RestaurantLoginView,
     GetProfilePictureView,
     RestaurantViewSet,
-    DishViewSet
+    DishViewSet,
+    RestaurantDetailView,
 )
 from rest_framework_simplejwt.views import TokenRefreshView
 
@@ -33,6 +34,10 @@ urlpatterns = [
     # Dish management
     path('dishes/', DishListCreateView.as_view(), name='dish-list-create'),
     path('dishes/<int:dish_id>/', DishDetailView.as_view(), name='dish-detail'),
+
+    path('<str:restaurant_name>/', RestaurantDetailView.as_view(), name='restaurant-detail'),
+
+
 
     # JWT token refresh
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

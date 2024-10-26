@@ -4,6 +4,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken
+from django.conf import settings
 from .serializers import CustomerSignUpSerializer, CustomerSerializer
 from .models import Customer
 from rest_framework.views import APIView
@@ -18,6 +19,21 @@ class CustomerSignUpView(generics.CreateAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSignUpSerializer
     permission_classes = [AllowAny]
+
+    def get_serializer_class(self):
+        # Dynamically choose serializer based on user type
+        if settings.LOGIN_TYPE == 'restaurant':
+            from restaurants.serializers import RestaurantSignUpSerializer
+            return RestaurantSignUpSerializer
+        return CustomerSignUpSerializer  # Default to customer signup
+
+    def get_queryset(self):
+        # Dynamically choose queryset based on user type
+        if settings.LOGIN_TYPE == 'restaurant':
+            from restaurants.models import Restaurant
+            return Restaurant.objects.all()
+        return Customer.objects.all()
+
 
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.parsers import JSONParser
@@ -54,6 +70,9 @@ class CustomerLoginView(TokenObtainPairView):
 
         if not username or not password:
             return Response({'error': 'Username and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Select user model based on LOGIN_TYPE
+        user_model = Customer if settings.LOGIN_TYPE == 'customer' else Restaurant
 
         # Check if the user exists and is active
         try:
@@ -103,6 +122,20 @@ class CustomerProfileView(APIView):
             serializer = CustomerSerializer(request.user)
             return Response(serializer.data)
         return Response({'error': 'No customer data available'}, status=status.HTTP_404_NOT_FOUND)
+    
+    def get_object(self):
+        # Dynamically select the model instance based on user type
+        if settings.LOGIN_TYPE == 'restaurant':
+            from restaurants.models import Restaurant
+            return Restaurant.objects.get(pk=self.request.user.pk)
+        return Customer.objects.get(pk=self.request.user.pk)
+    
+    def get_serializer_class(self):
+        if settings.LOGIN_TYPE == 'restaurant':
+            from restaurants.serializers import RestaurantSerializer
+            return RestaurantSerializer
+        return CustomerSerializer
+
 
     def patch(self, request):
         try:
@@ -225,3 +258,64 @@ class UpdateProfileView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework import status
+from django.conf import settings
+
+from customers.models import Customer
+from customers.serializers import CustomerSignUpSerializer
+from restaurants.models import Restaurant
+from restaurants.serializers import RestaurantSignUpSerializer
+
+class SignUpView(generics.CreateAPIView):
+    permission_classes = [AllowAny]
+
+    def get_serializer_class(self):
+        user_type = self.request.data.get('user_type')
+        if user_type == 'restaurant':
+            return RestaurantSignUpSerializer
+        return CustomerSignUpSerializer
+
+    def get_queryset(self):
+        user_type = self.request.data.get('user_type')
+        if user_type == 'restaurant':
+            return Restaurant.objects.all()
+        return Customer.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        user_type = request.data.get('user_type')
+        if not user_type or user_type not in ['customer', 'restaurant']:
+            return Response({'error': 'user_type is required and should be either "customer" or "restaurant".'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        
+        return super().create(request, *args, **kwargs)
+
+
+class LoginView(TokenObtainPairView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        user_type = request.data.get('user_type')
+
+        user_model = Restaurant if user_type == 'restaurant' else Customer
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        # Authenticate based on user model
+        try:
+            user = user_model.objects.get(username=username)
+            if not user.is_active:
+                return Response({'error': 'User account is inactive.'}, status=status.HTTP_401_UNAUTHORIZED)
+        except user_model.DoesNotExist:
+            return Response({'error': 'No active account found with the given credentials.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        # Blacklist existing tokens
+        tokens = OutstandingToken.objects.filter(user=user)
+        for token in tokens:
+            BlacklistedToken.objects.get_or_create(token=token)
+
+        response = super().post(request, *args, **kwargs)
+        response.data['message'] = 'You are now logged in successfully.'
+        return response

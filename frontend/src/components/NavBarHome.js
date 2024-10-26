@@ -5,10 +5,11 @@ import {
     FaBars, FaMapMarkerAlt, FaShoppingCart, FaSearch,
     FaRegBookmark, FaWallet, FaUtensils, FaLifeRing, FaCar, FaGift, FaRegGrinHearts
 } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Logout from '../components/Logout';
 
 const NavBarHome = () => {
+    const navigate = useNavigate();
     const mediaBaseURL = 'http://127.0.0.1:8000/media/';
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [name, setName] = useState('');
@@ -110,23 +111,49 @@ const NavBarHome = () => {
             {isMenuOpen && (
                 <div className="side-menu">
                     <button className="close-button" onClick={toggleMenu}>✖</button>
-                    <div className="user-info">
-                        <img src={profilePicture} alt="User Profile" className="user-profile-pic" />
-                        <h3>{name}</h3>
-                        <Link to="/customerprofile" className="manage-account-link">Manage account</Link>
+                    {isLoggedIn ? (
+                        <>
+                            {/* Menu for logged-in users */}
+                            <div className="user-info">
+                                <img src={profilePicture} alt="User Profile" className="user-profile-pic" />
+                                <h3>{name}</h3>
+                                <Link to="/customerprofile" className="manage-account-link" onClick={toggleMenu}>Manage account</Link>
+                            </div>
+                            <div className="side-links">
+                                <Link to="/orders" onClick={toggleMenu}><FaRegBookmark /> Orders</Link>
+                                <Link to="/favorites" onClick={toggleMenu}><FaRegGrinHearts /> Favorites</Link>
+                                <Link to="" onClick={toggleMenu}><FaWallet /> Wallet</Link>
+                                <Link to="" onClick={toggleMenu}><FaUtensils /> Meal plan</Link>
+                                <Link to="" onClick={toggleMenu}><FaLifeRing /> Help</Link>
+                                <Link to="" onClick={toggleMenu}><FaCar /> Get a ride</Link>
+                                <Link to="" onClick={toggleMenu}><FaGift /> Promotions</Link>
+                                <Link to="" onClick={toggleMenu}>Uber One <span className="promo-text">Try free for 4 weeks</span></Link>
+                                <Link to="" onClick={toggleMenu}><FaGift /> Invite friends <span className="invite-reward">You get $15 off</span></Link>
+                            </div>
+                            <Logout />
+                        </>
+                    ) : (
+                        <>
+                            {/* Menu for guests (not logged in) */}
+                            <button className="signup-side-button" onClick={() => navigate('/signup')}>Sign up</button>
+                            <button className="login-side-button" onClick={() => navigate('/login')}>Log in</button>
+                            <div className="side-links">
+                                <Link to="/business-account" onClick={toggleMenu}>Create a business account</Link>
+                                <Link to="/add-restaurant" onClick={toggleMenu}>Add your restaurant</Link>
+                                <Link to="/signup-to-deliver" onClick={toggleMenu}>Sign up to deliver</Link>
+                            </div>
+                        </>
+                    )}
+
+                    {/* Download app section - always shown */}
+                    <div className="download-app">
+                        <img src="/images/uber-eats-logo.png" alt="Uber Eats" />
+                        <p>There's more to love in the app.</p>
+                        <div className="app-links">
+                            <button>iPhone</button>
+                            <button>Android</button>
+                        </div>
                     </div>
-                    <div className="side-links">
-                        <Link to="/orders" onClick={toggleMenu}><FaRegBookmark /> Orders</Link>
-                        <Link to="/favorites" onClick={toggleMenu}><FaRegGrinHearts /> Favorites</Link>
-                        <Link to="" onClick={toggleMenu}><FaWallet /> Wallet</Link>
-                        <Link to="" onClick={toggleMenu}><FaUtensils /> Meal plan</Link>
-                        <Link to="" onClick={toggleMenu}><FaLifeRing /> Help</Link>
-                        <Link to="" onClick={toggleMenu}><FaCar /> Get a ride</Link>
-                        <Link to="" onClick={toggleMenu}><FaGift /> Promotions</Link>
-                        <Link to="" onClick={toggleMenu}>Uber One <span className="promo-text">Try free for 4 weeks</span></Link>
-                        <Link to="" onClick={toggleMenu}><FaGift /> Invite friends <span className="invite-reward">You get $15 off</span></Link>
-                    </div>
-                    <Logout />
                 </div>
             )}
         </>

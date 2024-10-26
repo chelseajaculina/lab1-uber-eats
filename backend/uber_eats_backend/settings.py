@@ -18,9 +18,23 @@ from datetime import timedelta
 # CORS_ALLOWED_ORIGINS is defined later in the file
 
 #AUTH_USER_MODEL = 'customers.Customer'
-AUTH_USER_MODEL = 'restaurants.Restaurant'
+#AUTH_USER_MODEL = 'restaurants.Restaurant'
 # settings.py
 #AUTH_USER_MODEL = 'accounts.User'
+
+from dotenv import load_dotenv
+import os
+load_dotenv()  # Load environment variables from .env
+
+
+# Set AUTH_USER_MODEL based on the login type
+LOGIN_TYPE = os.getenv('LOGIN_TYPE', 'customer')  # Default to customer if not specified
+
+if LOGIN_TYPE == 'customer':
+    AUTH_USER_MODEL = 'customers.Customer'
+elif LOGIN_TYPE == 'restaurant':
+    AUTH_USER_MODEL = 'restaurants.Restaurant'
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

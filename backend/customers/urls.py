@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import UserProfileView, CustomerSignUpView, LogoutView, CustomerProfileView, UploadProfilePictureView, GetCustomerDataView, GetProfilePictureView, CustomerLoginView, TokenRefreshView,RestaurantListView, MenuItemListView
+from .views import ToggleFavoriteView
 
 urlpatterns = [
     path('signup/', CustomerSignUpView.as_view(), name='customer-signup'),
@@ -15,6 +16,7 @@ urlpatterns = [
 
     path('logout/', LogoutView.as_view(), name='logout'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('user-deshboard-brands/', RestaurantListView.as_view(), name='user-deshboard-brands'),
+    path('user-dashboard-brands/', RestaurantListView.as_view(), name='user-dashboard-brands'),
     path('menu/<str:restaurant_name>/', MenuItemListView.as_view(), name='restaurant-menu'),
+    path('favorites/', ToggleFavoriteView.as_view(), name='toggle_favorite'),
 ]

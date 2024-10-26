@@ -11,6 +11,7 @@ from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import permissions, status
+from django.conf import settings
 
 
 
@@ -237,3 +238,29 @@ class MenuItemListView(generics.ListAPIView):
         restaurant_name = self.kwargs['restaurant_name']
         return MenuItem.objects.filter(restaurant__name__iexact=restaurant_name)
 
+# views.py
+from rest_framework import status, views
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from .models import Restaurant, Favorite
+from .serializers import RestaurantSerializer
+from django.shortcuts import get_object_or_404
+
+class ToggleFavoriteView(views.APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, restaurant_id):
+        
+        user = request.user
+        print(f"User: {user}")
+        restaurant = get_object_or_404(Restaurant, id=restaurant_id)
+        print(f"Restaurant: {restaurant}")
+        # Check if the restaurant is already a favorite
+        favorite, created = Favorite.objects.get_or_create(user=user, restaurant=restaurant)
+        print(f"Favorite: {favorite}")
+        if created:
+            # Added to favorites
+            return Response({'message': 'Added to favorites'}, status=status.HTTP_201_CREATED)
+        else:
+            # Remove from favorites
+            favorite.delete()
+            return Response({'message': 'Removed from favorites'}, status=status.HTTP_200_OK)

@@ -7,4 +7,5 @@
     border: none;      /* Remove default border */
     padding: 0.5rem;   /* Optional padding to make it look button-like */
     color: #fff;
+    text-align: center;
 }

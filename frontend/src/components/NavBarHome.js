@@ -104,9 +104,6 @@ const NavBarHome = () => {
                     {/* <button className="login-button" onClick={handleLoginClick}>Log in</button>
                     <button className="signup-button">Sign up</button> */}
                     {isLoggedIn && <FaShoppingCart className="shopping-cart-icon" />}
-                    <Link to="/cart">View Cart</Link>
-                    
-                    
                 </div>
             </nav>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './RestaurantDashboard.css';
 import NavBarBusiness from './NavBarBusiness.js';
 import { Link } from 'react-router-dom';
@@ -6,33 +6,11 @@ import axios from 'axios';
 
 const RestaurantDashboard = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // const [banner, setBanner] = useState('/path-to-your-banner-image.png'); // Replace with your banner image path
-  const [logo, setLogo] = useState(localStorage.getItem('restaurantProfilePicture') || '/path-to-your-logo.png'); // Replace with your default logo image path
-  // Replace with your default logo image path
-  const [authToken, setAuthToken] = useState(localStorage.getItem('access_token'));
+  const [logo, setLogo] = useState(localStorage.getItem('restaurantProfilePicture') || '/path-to-your-logo.png');
+  const authToken = localStorage.getItem('access_token');
   const mediaBaseURL = 'http://localhost:8000/media/';
 
-  useEffect(() => {
-    // Simulate a login check
-    const checkLoginStatus = () => {
-      const token = localStorage.getItem('access_token');
-      if (token) {
-        setAuthToken(token);
-        setIsLoggedIn(true);
-      } else {
-        setIsLoggedIn(false);
-      }
-    };
-
-    checkLoginStatus();
-
-    // Fetch restaurant details to get the logo dynamically
-    if (authToken) {
-      fetchRestaurantDetails();
-    }
-  }, [authToken]);
-
-  const fetchRestaurantDetails = async () => {
+  const fetchRestaurantDetails = useCallback(async () => {
     try {
       const response = await axios.get('http://localhost:8000/api/restaurants/me/', {
         headers: { Authorization: `Bearer ${authToken}` }
@@ -47,23 +25,34 @@ const RestaurantDashboard = () => {
     } catch (error) {
       console.error('Error fetching restaurant data:', error);
     }
-  };
+  }, [authToken, mediaBaseURL]);
+
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      const loggedIn = !!authToken;
+      setIsLoggedIn(loggedIn);
+    };
+
+    checkLoginStatus();
+
+    if (authToken) {
+      fetchRestaurantDetails();
+    }
+  }, [authToken, fetchRestaurantDetails]);
 
   return (
     <div className="home-container">
+      {/* Navbar is always displayed */}
       <NavBarBusiness />
-      {/* Show NavBar only if the user is not logged in */}
-      {!isLoggedIn }
 
-      {/* Banner and Logo Section */}
       <div className="banner-container">
+        {/* Uncomment the line below if a banner image is available */}
         {/* <img src={banner} alt="Restaurant Banner" className="restaurant-banner" /> */}
         <div className="logo-container">
           <img src={logo} alt="Restaurant Logo" className="restaurant-logo" />
         </div>
       </div>
 
-      {/* Restaurant Profile  */}
       <div className="promotions">
         <div className="promotion-card">
           <h3>Profile Information</h3>

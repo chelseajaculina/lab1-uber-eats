@@ -11,6 +11,7 @@ import Logout from '../components/Logout'; // Import the Logout component
 const NavBarBusiness = () => {
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [profilePicture, setProfilePic] = useState(localStorage.getItem('restaurantProfilePicture') || '')
     const [restaurantName, setRestaurantName] = useState(''); // New state for restaurant name
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -40,12 +41,12 @@ const NavBarBusiness = () => {
                         setRestaurantName(response.data.restaurant_name); // Set restaurant name from response
                     }
 
-                    // if (response.data.profile_picture) {
-                    //     // Construct the full URL for the profile picture
-                    //     const profilePictureUrl = `${mediaBaseURL}${response.data.profile_picture}`;
-                    //     setProfilePic(profilePictureUrl);
-                    //     localStorage.setItem('restaurantProfilePicture', profilePictureUrl); // Persist in localStorage
-                    // }
+                    if (response.data.profile_picture) {
+                        // Construct the full URL for the profile picture
+                        const profilePictureUrl = `${mediaBaseURL}${response.data.profile_picture}`;
+                        setProfilePic(profilePictureUrl);
+                        localStorage.setItem('restaurantProfilePicture', profilePictureUrl); // Persist in localStorage
+                    }
                 } catch (error) {
                     console.error('Error fetching user data:', error.response ? error.response.data : error.message);
                 }
@@ -79,7 +80,7 @@ const NavBarBusiness = () => {
                     {isLoggedIn ? (
                         // Restaurant Side Menu
                         <div className="user-info">
-                            {/* <img src={profilePicture} alt="User Profile" className="user-profile-pic" /> */}
+                             <img src={profilePicture} alt="User Profile" className="user-profile-pic" /> 
                             <h3>Welcome, {restaurantName || "Restaurant Owner"}</h3> {/* Display restaurant name */}
                             <Link to="/restaurantprofile" className="manage-account-link">Manage account</Link>
                             <div className="side-links">

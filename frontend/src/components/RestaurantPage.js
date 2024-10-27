@@ -7,8 +7,10 @@ import NavBarHome from './NavBarHome';
 const RestaurantPage = () => {
     const [restaurant, setRestaurant] = useState(null);
     const [dishes, setDishes] = useState([]);
+    const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')) || []); // Initialize cart from localStorage
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
     const { restaurantName } = useParams();
 
     useEffect(() => {
@@ -16,9 +18,9 @@ const RestaurantPage = () => {
             try {
                 setLoading(true);
                 setError(null);
-                const token = localStorage.getItem('access_token');
 
-                const response = await axios.get(`http://localhost:8000/api/restaurants/${restaurantName}/`, {
+                const token = localStorage.getItem('access_token');
+                const response = await axios.get(`http://localhost:8000/api/restaurants/${restaurantName.toLowerCase()}/`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -37,10 +39,24 @@ const RestaurantPage = () => {
     }, [restaurantName]);
 
     const addToCart = (dish) => {
-        // Handle the addition of the item to the cart
-        console.log(`Added ${dish.name} to the cart!`);
-        // Add further cart logic here (e.g., updating cart state or local storage)
+        setCart((prevCart) => {
+            const existingItem = prevCart.find((item) => item.id === dish.id);
+            if (existingItem) {
+                // If the item already exists in the cart, update its quantity
+                return prevCart.map((item) =>
+                    item.id === dish.id ? { ...item, quantity: item.quantity + 1 } : item
+                );
+            } else {
+                // If it's a new item, add it to the cart with quantity 1
+                return [...prevCart, { ...dish, quantity: 1 }];
+            }
+        });
     };
+
+    // Save cart to localStorage whenever it changes
+    useEffect(() => {
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }, [cart]);
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
@@ -50,7 +66,11 @@ const RestaurantPage = () => {
         <div className="restaurant-page">
             <NavBarHome />
             <div className="restaurant-header">
-                <img src={`http://localhost:8000/media/${restaurant.profile_picture}`} alt={restaurant.restaurant_name} className="restaurant-logo" />
+                <img 
+                    src={`http://localhost:8000/media/${restaurant.profile_picture}`} 
+                    alt={restaurant.restaurant_name} 
+                    className="restaurant-logo" 
+                />
                 <div className="restaurant-details">
                     <h1>{restaurant.restaurant_name}</h1>
                     <p>{restaurant.description}</p>
@@ -64,11 +84,15 @@ const RestaurantPage = () => {
             <div className="dish-list">
                 {dishes.map(dish => (
                     <div className="dish-card" key={dish.id}>
-                        <img src={`http://localhost:8000/${dish.image}`} alt={dish.name} className="dish-image" />
+                        <img 
+                            src={`http://localhost:8000/${dish.image}`} 
+                            alt={dish.name} 
+                            className="dish-image" 
+                        />
                         <h3>{dish.name}</h3>
                         <p>{dish.description}</p>
-                        <p><strong>${Number(dish.price).toFixed(2)}</strong></p>
-                        <button className="add-to-cart-button" onClick={() => addToCart(dish)}>+</button>
+                        <p><strong>${isNaN(Number(dish.price)) ? 'N/A' : Number(dish.price).toFixed(2)}</strong></p>
+                        <button className="add-to-cart-button" onClick={() => addToCart(dish)}>Add to Cart</button>
                     </div>
                 ))}
             </div>

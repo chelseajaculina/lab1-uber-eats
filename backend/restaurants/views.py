@@ -8,10 +8,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 from django.contrib.auth import authenticate
 from .models import Restaurant, Dish
-from customers.models import Customer
 from .serializers import RestaurantSerializer, DishSerializer, RestaurantSignUpSerializer
 import logging
-from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -27,18 +25,6 @@ class RestaurantSignUpView(generics.CreateAPIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def get_serializer_class(self):
-        if settings.LOGIN_TYPE == 'customer':
-            from customers.serializers import CustomerSignUpSerializer
-            return CustomerSignUpSerializer
-        return RestaurantSignUpSerializer
-
-    def get_queryset(self):
-        if settings.LOGIN_TYPE == 'customer':
-            from customers.models import Customer
-            return Customer.objects.all()
-        return Restaurant.objects.all()
 
 # Restaurant Login View
 class RestaurantLoginView(TokenObtainPairView):
@@ -46,11 +32,6 @@ class RestaurantLoginView(TokenObtainPairView):
 
     def post(self, request, *args, **kwargs):
         logger.info(f"Request data: {request.data}")  # Debugging information
-
-                # Select user model based on LOGIN_TYPE
-        #user_model = Restaurant if settings.LOGIN_TYPE == 'restaurant' else Customer
-        username = request.data.get('username')
-
 
         # Blacklist any existing tokens for the user
         tokens = OutstandingToken.objects.filter(user__username=request.data.get('username'))
@@ -78,10 +59,7 @@ class RestaurantLogoutView(APIView):
             logger.error(f"Error during logout: {str(e)}")
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-# Restaurant Profile Viewfrom rest_framework.parsers import MultiPartParser, FormParser
 
-
-# backend/restaurants/views.py
 
 from rest_framework import status, permissions
 from rest_framework.response import Response
@@ -113,17 +91,7 @@ class RestaurantProfileView(APIView):
         except Restaurant.DoesNotExist:
             return Response({'error': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
     
-    def get_object(self):
-        if settings.LOGIN_TYPE == 'customer':
-            from customers.models import Customer
-            return Customer.objects.get(pk=self.request.user.pk)
-        return Restaurant.objects.get(pk=self.request.user.pk)
 
-    def get_serializer_class(self):
-        if settings.LOGIN_TYPE == 'customer':
-            from customers.serializers import CustomerSerializer
-            return CustomerSerializer
-        return RestaurantSerializer
 
 
 
@@ -135,36 +103,45 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Restaurant
 
+from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework import permissions, status
+from rest_framework.response import Response
+from .models import Restaurant
+
 class UploadRestaurantProfilePictureView(APIView):
     parser_classes = [MultiPartParser, FormParser]
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+        # Debugging: Check user and headers
+        print(f"User: {request.user}, Authenticated: {request.user.is_authenticated}")
+        print(f"Headers: {request.headers}")
+
+        if not request.user.is_authenticated:
+            return Response({'error': 'User not authenticated'}, status=status.HTTP_403_FORBIDDEN)
+
+        # Retrieve the file from the request
+        file = request.data.get('profile_picture')
+        if not file:
+            return Response({'error': 'No file provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+          # Debugging: Check file details
+        print(f"File name: {file.name}, File size: {file.size}")
+
+        # Update profile picture for the authenticated user's restaurant profile
         try:
-            if settings.LOGIN_TYPE == 'customer':
-                from customers.models import Customer
-                user_instance = Customer.objects.get(pk=request.user.pk)
-            else:
-                user_instance = Restaurant.objects.get(pk=request.user.pk)
-
-            restaurant = request.user # Ensure that the User model has a linked Restaurant object.
-            
-            file = request.data.get('profile_picture')
-            if not file:
-                return Response({'error': 'No file provided'}, status=status.HTTP_400_BAD_REQUEST)
-
-            # Update profile picture
+            # Assuming `request.user` has a related `Restaurant` profile
+            restaurant = request.user.restaurant
             restaurant.profile_picture = file
             restaurant.save()
 
-            profile_picture_url = restaurant.profile_picture.url
-
+            # Build absolute URL for the profile picture
+            profile_picture_url = request.build_absolute_uri(restaurant.profile_picture.url)
             return Response({'profilePicture': profile_picture_url}, status=status.HTTP_200_OK)
-        
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-
+        except Restaurant.DoesNotExist:
+            return Response({'error': 'Restaurant profile not found'}, status=status.HTTP_404_NOT_FOUND)
 
 # Get Restaurant Data View
 class GetRestaurantDataView(APIView):
@@ -338,59 +315,3 @@ from .serializers import RestaurantSerializer
 class RestaurantListView(generics.ListAPIView):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
-
-
-from customers.serializers import CustomerSignUpSerializer
-from customers.models import Customer
-
-class SignUpView(generics.CreateAPIView):
-    permission_classes = [AllowAny]
-
-    def get_serializer_class(self):
-        user_type = self.request.data.get('user_type')
-        if user_type == 'restaurant':
-            return RestaurantSignUpSerializer
-        return CustomerSignUpSerializer
-
-    def get_queryset(self):
-        user_type = self.request.data.get('user_type')
-        if user_type == 'restaurant':
-            return Restaurant.objects.all()
-        return Customer.objects.all()
-
-    def create(self, request, *args, **kwargs):
-        user_type = request.data.get('user_type')
-        if not user_type or user_type not in ['customer', 'restaurant']:
-            return Response({'error': 'user_type must be either "customer" or "restaurant".'},
-                            status=status.HTTP_400_BAD_REQUEST)
-        
-        return super().create(request, *args, **kwargs)
-    
-
-class LoginView(TokenObtainPairView):
-    permission_classes = [AllowAny]
-
-    def post(self, request, *args, **kwargs):
-        user_type = request.data.get('user_type')
-
-        user_model = Restaurant if user_type == 'restaurant' else Customer
-        username = request.data.get('username')
-        password = request.data.get('password')
-
-        # Authenticate based on user model
-        try:
-            user = user_model.objects.get(username=username)
-            if not user.is_active:
-                return Response({'error': 'User account is inactive.'}, status=status.HTTP_401_UNAUTHORIZED)
-        except user_model.DoesNotExist:
-            return Response({'error': 'No active account found with the given credentials.'}, status=status.HTTP_401_UNAUTHORIZED)
-
-        # Blacklist existing tokens
-        tokens = OutstandingToken.objects.filter(user=user)
-        for token in tokens:
-            BlacklistedToken.objects.get_or_create(token=token)
-
-        response = super().post(request, *args, **kwargs)
-        response.data['message'] = 'You are now logged in successfully.'
-        return response
-

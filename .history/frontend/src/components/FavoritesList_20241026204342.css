@@ -1,0 +1,69 @@
+/* Favorites.css */
+
+.favorites-page {
+    padding: 20px;
+}
+
+.favorites-page h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.favorite-card {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.favorite-card:hover {
+    transform: translateY(-5px);
+}
+
+.favorite-image {
+    position: relative;
+}
+
+.favorite-image img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.favorite-promotion {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: green;
+    color: white;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+.favorite-details {
+    padding: 16px;
+}
+
+.favorite-details h3 {
+    font-size: 18px;
+    margin: 0 0 8px;
+}
+
+.favorite-rating {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+.favorite-info {
+    font-size: 14px;
+    color: #666;
+}

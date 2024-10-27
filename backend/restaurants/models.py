@@ -5,13 +5,14 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
 
-def upload_path(instance, filename):
-    # This function can dynamically create a directory based on the instance properties
-    return f'profile_pictures/{instance.restaurant_name}/{filename}'
+# def upload_path(instance, filename):
+#     # This function can dynamically create a directory based on the instance properties
+#     return f'profile_pictures/{instance.restaurant_name}/{filename}'
 
 
 def upload_path(instance, filename):
     # Access restaurant's restaurant_name from the related Restaurant instance
+    
     return f'profile_pictures/{instance.restaurant.restaurant_name}/{filename}'
 
 
@@ -119,5 +120,4 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order {self.id} - {self.customer} at {self.restaurant.restaurant_name}"
-
 

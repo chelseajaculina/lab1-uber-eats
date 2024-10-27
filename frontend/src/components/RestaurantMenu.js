@@ -155,7 +155,7 @@ const handleImageChange = (e) => {
   return (
     <div className="restaurant-menu">
       <NavBarBusiness />
-    
+
       <h2 className="menu-title">Menu</h2>
 
       {/* Add Dish Button */}

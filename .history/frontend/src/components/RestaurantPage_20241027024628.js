@@ -72,7 +72,7 @@ const RestaurantPage = () => {
                     className="restaurant-logo" 
                 />
                 <div className="restaurant-details">
-                    <b><h1>{restaurant.restaurant_name}</h1></b>
+                    <b>h1>{restaurant.restaurant_name}</h1></b>
                     <p>{restaurant.description}</p>
                     <p><strong>Location: </strong>{restaurant.location}</p>
                     <p><strong>Contact Info: </strong>{restaurant.contact_info}</p>

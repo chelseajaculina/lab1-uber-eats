@@ -16,21 +16,18 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Restaurant Logo */
 .restaurant-logo {
     width: 120px;
-    height: 120px;
+    height: 120px; /* Reduced height for a balanced look */
     border-radius: 50%;
-    object-fit: contain;
+    object-fit: contain; /* Ensures the logo fits without being cropped */
     border: 2px solid #ddd;
-    background-color: #fff;
-    padding: 10px;
+    background-color: #fff; /* Background to make the logo stand out */
+    padding: 10px; /* Padding inside to ensure logo fits well */
 }
 
-/* Restaurant Details Section - Make Wider */
 .restaurant-details {
-    flex-grow: 1; /* Allows it to take up remaining space */
-    max-width: 800px; /* Adjusts maximum width to make it wider */
+    max-width: 600px;
 }
 
 .restaurant-details h1 {
@@ -46,8 +43,8 @@
 /* Dishes Section */
 .dish-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid */
+    gap: 20px; /* Spacing between grid items */
     margin-top: 20px;
 }
 

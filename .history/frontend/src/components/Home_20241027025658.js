@@ -52,7 +52,7 @@ const Home = () => {
 
       {/* Restaurants Section */}
       <div className="restaurants-section">
-       <b><h2>Restaurants</h2></b>
+       <b></b> <h2>Restaurants</h2>
         <div className="restaurants-list">
           {restaurants.map((item, index) => (
             <div key={index} className="restaurant-card">

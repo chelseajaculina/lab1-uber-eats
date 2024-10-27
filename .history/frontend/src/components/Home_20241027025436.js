@@ -26,7 +26,7 @@ const Home = () => {
 
       {/* Categories Section */}
       <div className="categories-scroll">
-        {["Grocery", "Fast Food", "Pizza", "Mexican", "Wings", "Ice Cream", "Burgers", "Indian", "Chinese", "Desserts", "Thai", "Asian", "Italian", "Breakfast", "Bubble Tea"].map((category) => (
+        {["Grocery", "Fast Food", "Pizza", "Mexican", "Wings", "Ice Cream", "Burgers", "Indian", "Chinese", "Desserts", "Thai", "Asian", "Italian", "Breakfast", "Bubble Tea "].map((category) => (
           <div key={category} className="category-item">
             <img src={`${process.env.PUBLIC_URL}/images/${category.toLowerCase()}.png`} alt={category} />
             <span>{category}</span>
@@ -52,7 +52,7 @@ const Home = () => {
 
       {/* Restaurants Section */}
       <div className="restaurants-section">
-       <b><h2>Restaurants</h2></b>
+        <h2>Restaurants</h2>
         <div className="restaurants-list">
           {restaurants.map((item, index) => (
             <div key={index} className="restaurant-card">

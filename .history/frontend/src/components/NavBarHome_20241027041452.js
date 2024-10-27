@@ -3,7 +3,7 @@ import './NavBar.css';
 import axios from 'axios';
 import {
     FaBars, FaMapMarkerAlt, FaShoppingCart, FaSearch,
-    FaRegBookmark, FaWallet, FaUtensils, FaLifeRing, FaCar, FaGift, FaRegGrinHearts, FaApple, FaAndroid
+    FaRegBookmark, FaWallet, FaUtensils, FaLifeRing, FaCar, FaGift, FaRegGrinHearts
 } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import Logout from '../components/Logout';

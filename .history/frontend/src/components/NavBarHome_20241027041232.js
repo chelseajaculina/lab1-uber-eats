@@ -3,7 +3,7 @@ import './NavBar.css';
 import axios from 'axios';
 import {
     FaBars, FaMapMarkerAlt, FaShoppingCart, FaSearch,
-    FaRegBookmark, FaWallet, FaUtensils, FaLifeRing, FaCar, FaGift, FaRegGrinHearts, FaApple, FaAndroid
+    FaRegBookmark, FaWallet, FaUtensils, FaLifeRing, FaCar, FaGift, FaRegGrinHearts
 } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import Logout from '../components/Logout';
@@ -171,11 +171,11 @@ const NavBarHome = () => {
                     
                     {/* Download app section - always shown */}
                     <div className="download-app">
-                    <img src="/images/uber-eats-logo.jpg" alt="Uber Eats" style={{ width: 'auto', maxWidth: '800px', height: '40px' }} />
+                    <img src="/images/uber-eats-logo.jpg" alt="Uber Eats" style={{ width: '40px', height: '100px' }} />
                         <p>There's more to love in the app.</p>
                         <div className="app-links">
-                            <button><FaApple />iPhone</button>
-                            <button><FaAndroid />Android</button>
+                            <button>iPhone</button>
+                            <button>Android</button>
                         </div>
                     </div>
                 </div>

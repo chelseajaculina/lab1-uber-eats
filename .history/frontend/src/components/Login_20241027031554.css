@@ -1,0 +1,75 @@
+/* Container for the entire login page */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    background-color: #f7f7f7;
+}
+
+/* Title for the login section */
+.login-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+/* Flex container to hold both forms side by side */
+.login-forms {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    max-width: 1000px;
+    gap: 20px; /* Space between the two forms */
+}
+
+/* Styling for each individual form */
+.form-container {
+    flex: 1;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Form titles */
+.form-container h2 {
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .login-forms {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-container {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}
+
+
+/* Adjust navbar height */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 2rem; /* Increase padding for taller navbar */
+    background-color: transparent;
+}
+
+/* Style the brand title to ensure visibility in the taller navbar */
+.brand-title {
+    font-weight: bold;
+    font-size: 1.8rem; /* Adjust font size if needed */
+    color: #000;
+}
+
+/* Optional: If you want to adjust the font size of the Uber Eats logo */
+.brand-title span {
+    font-size: 1.8rem;
+    color: #00cc66; /* Adjust color if needed */
+}

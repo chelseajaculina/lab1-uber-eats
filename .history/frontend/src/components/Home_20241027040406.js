@@ -3,44 +3,25 @@ import './Home.css';
 import NavBarHome from './NavBarHome';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 const Home = () => {
   const [restaurants, setRestaurants] = useState([]);
-  const [favorites, setFavorites] = useState({});
 
   // Fetch restaurant data from Django API
   useEffect(() => {
     axios.get('http://localhost:8000/api/restaurants/restaurants/list/')
       .then(response => {
-        console.log("API Response:", response.data);
-        setRestaurants(response.data);
+        console.log("API Response:", response.data);  // Log the response data for debugging
+        setRestaurants(response.data);  // Response is an array of restaurant objects with their details
       })
       .catch(error => {
         console.error("Error fetching restaurants:", error);
       });
   }, []);
 
-  // Load favorites from localStorage on initial render
-  useEffect(() => {
-    const storedFavorites = JSON.parse(localStorage.getItem('favoriteRestaurants')) || {};
-    setFavorites(storedFavorites);
-  }, []);
-
-  // Toggle favorite status and save to localStorage
-  const toggleFavorite = (restaurantId) => {
-    setFavorites((prevFavorites) => {
-      const updatedFavorites = {
-        ...prevFavorites,
-        [restaurantId]: !prevFavorites[restaurantId],
-      };
-      localStorage.setItem('favoriteRestaurants', JSON.stringify(updatedFavorites));
-      return updatedFavorites;
-    });
-  };
-
   return (
     <div className="home-container">
+      {/* Always show NavBar */}
       <NavBarHome />
 
       {/* Categories Section */}
@@ -71,28 +52,21 @@ const Home = () => {
 
       {/* Restaurants Section */}
       <div className="restaurants-section">
-        <h2>Restaurants</h2>
+       <b><h2>Restaurants</h2></b>
         <div className="restaurants-list">
           {restaurants.map((item, index) => (
             <div key={index} className="restaurant-card">
-              {/* Image Container with Favorite Icon */}
-              <div className="image-container">
-                <img 
-                  src={item.restaurant.profile_picture ? `http://localhost:8000/media/${item.restaurant.profile_picture}` : `${process.env.PUBLIC_URL}/images/default-restaurant.jpg`} 
-                  alt={item.restaurant.restaurant_name} 
-                  className="restaurant-image"
-                />
-                <button 
-                  className="favorite-icon" 
-                  onClick={() => toggleFavorite(item.restaurant.id)}
-                >
-                  {favorites[item.restaurant.id] ? <FaHeart className="heart-icon filled" /> : <FaRegHeart className="heart-icon" />}
-                </button>
-              </div>
+              {/* Restaurant Image */}
+              <img 
+                src={item.restaurant.profile_picture ? `http://localhost:8000/media/${item.restaurant.profile_picture}` : `${process.env.PUBLIC_URL}/images/default-restaurant.jpg`} 
+                alt={item.restaurant.restaurant_name} 
+                className="restaurant-image"
+              />
 
               {/* Restaurant Details */}
               <div className="restaurant-details">
-                <h3>
+               {/* Link to the restaurant's specific page */}
+               <h3>
                   <Link to={`/brands/${item.restaurant.restaurant_name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`}>
                     {item.restaurant.restaurant_name}
                   </Link>
@@ -102,6 +76,29 @@ const Home = () => {
                 <p><strong>Contact:</strong> {item.restaurant.contact_info || "No contact info available"}</p>
                 <p><strong>Timings:</strong> {item.restaurant.timings || "No timings available"}</p>
               </div>
+              {/* Display Dishes if Available */}
+              {/* {item.dishes.length > 0 && (
+                <div className="dishes-section">
+                  <h4>Popular Dishes</h4>
+                  <ul>
+                    {item.dishes.map((dish) => (
+                      <li key={dish.id} className="dish-item">
+                        <img 
+                          src={`http://localhost:8000${dish.image}`} 
+                          alt={dish.name} 
+                          className="dish-image"
+                        />
+                        <div className="dish-info">
+                          <p><strong>{dish.name}</strong></p>
+                          <p>{dish.description}</p>
+                          <p><strong>Price:</strong> ${dish.price}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )} */}
+              {/* )} */}
             </div>
           ))}
         </div>

@@ -21,26 +21,17 @@ const Home = () => {
       });
   }, []);
 
-  // Load favorites from localStorage on initial render
-  useEffect(() => {
-    const storedFavorites = JSON.parse(localStorage.getItem('favoriteRestaurants')) || {};
-    setFavorites(storedFavorites);
-  }, []);
-
-  // Toggle favorite status and save to localStorage
+  // Toggle favorite status
   const toggleFavorite = (restaurantId) => {
-    setFavorites((prevFavorites) => {
-      const updatedFavorites = {
-        ...prevFavorites,
-        [restaurantId]: !prevFavorites[restaurantId],
-      };
-      localStorage.setItem('favoriteRestaurants', JSON.stringify(updatedFavorites));
-      return updatedFavorites;
-    });
+    setFavorites((prevFavorites) => ({
+      ...prevFavorites,
+      [restaurantId]: !prevFavorites[restaurantId],
+    }));
   };
 
   return (
     <div className="home-container">
+      {/* Always show NavBar */}
       <NavBarHome />
 
       {/* Categories Section */}

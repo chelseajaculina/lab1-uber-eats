@@ -195,27 +195,20 @@
   font-weight: bold;
 }
 
-.image-container {
-  position: relative;
-  width: 100%;
-}
-
-.restaurant-image {
-  width: 100%;
-  border-radius: 10px;
+.restaurant-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .favorite-icon {
-  position: absolute;
-  top: 10px;
-  right: 10px;
   background: none;
   border: none;
   cursor: pointer;
   color: #e0245e; /* Red color for heart icon */
-  font-size: 24px;
+  font-size: 20px;
 }
 
 .heart-icon.filled {
-  color: #ff5a5f; /* Filled heart color */
+  color: #ff5a5f;
 }

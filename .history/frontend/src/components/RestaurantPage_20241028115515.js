@@ -15,6 +15,7 @@ const RestaurantPage = () => {
 
     const { restaurantName } = useParams();
 
+    // Fetch restaurant data when component mounts
     useEffect(() => {
         const fetchRestaurantData = async () => {
             try {
@@ -40,23 +41,29 @@ const RestaurantPage = () => {
         fetchRestaurantData();
     }, [restaurantName]);
 
+    // Add item to cart or update quantity if it already exists
     const addToCart = (dish) => {
         setCart((prevCart) => {
+            // Check if the item already exists in the cart
             const existingItem = prevCart.find((item) => item.id === dish.id);
             if (existingItem) {
+                // If the item exists, update its quantity
                 return prevCart.map((item) =>
                     item.id === dish.id ? { ...item, quantity: item.quantity + 1 } : item
                 );
             } else {
+                // If the item doesn't exist, add it to the cart with a quantity of 1
                 return [...prevCart, { ...dish, quantity: 1 }];
             }
         });
     };
 
+    // Save updated cart to localStorage whenever it changes
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cart));
     }, [cart]);
 
+    // Handle loading and error states
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
     if (!restaurant) return <div>No restaurant data found</div>;
@@ -64,40 +71,6 @@ const RestaurantPage = () => {
     return (
         <div className="restaurant-page">
             <NavBarHome />
-
-            <div className="navbar-cart" style={{ position: 'absolute', top: '20px', right: '20px' }}>
-    <button
-        className="view-cart-button"
-        onClick={() => setIsCartOpen(true)}
-        style={{
-            backgroundColor: '#4CAF50',
-            color: 'white',
-            borderRadius: '5px',
-            padding: '10px 20px',
-            fontSize: '16px',
-            display: 'flex',
-            alignItems: 'center',
-        }}
-    >
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            width="24"
-            height="24"
-            style={{ marginRight: '10px' }}
-        >
-            <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M3 3h2l.4 2m4.6 0h9l1 6h-14l1.3-6zm10.9 11a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm-11 0a 2 2 0 1 1-4 0 2 2 0 0 1 4 0z"
-            />
-        </svg>
-        View Cart ({cart.reduce((acc, item) => acc + item.quantity, 0)})
-    </button>
-</div>
             <div className="restaurant-header">
                 <img 
                     src={`http://localhost:8000/media/${restaurant.profile_picture}`} 
@@ -130,38 +103,13 @@ const RestaurantPage = () => {
                 ))}
             </div>
 
-            <button
-    className="view-cart-button"
-    onClick={() => setIsCartOpen(true)}
-    style={{
-        backgroundColor: '#4CAF50',
-        color: 'white',
-        borderRadius: '5px',
-        padding: '10px 20px',
-        fontSize: '16px',
-        display: 'flex',
-        alignItems: 'center',
-    }}
->
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        width="24"
-        height="24"
-        style={{ marginRight: '10px' }}
-    >
-        <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M3 3h2l.4 2m4.6 0h9l1 6h-14l1.3-6zm10.9 11a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm-11 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"
-        />
-    </svg>
-    View Cart ({cart.reduce((acc, item) => acc + item.quantity, 0)})
-</button>
+            {/* View Cart Button */}
+            <div class 
+            <button className="view-cart-button" onClick={() => setIsCartOpen(true)}>
+                View Cart ({cart.reduce((acc, item) => acc + item.quantity, 0)})
+            </button>
 
+            {/* Cart Modal */}
             {isCartOpen && <CartModal cart={cart} setCart={setCart} onClose={() => setIsCartOpen(false)} />}
         </div>
     );

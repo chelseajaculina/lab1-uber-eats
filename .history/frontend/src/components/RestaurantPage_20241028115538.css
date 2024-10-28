@@ -89,4 +89,10 @@
     font-size: 1.1rem;
 }
 
+.navbar-cart {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    margin: 20px;
+}
 

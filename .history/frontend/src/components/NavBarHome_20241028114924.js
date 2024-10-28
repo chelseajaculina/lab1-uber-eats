@@ -188,7 +188,6 @@ const NavBarHome = () => {
                         </div>
                     </div>
                 </div>
-            )}
 
             {/* Cart Modal */}
             {isCartOpen && (

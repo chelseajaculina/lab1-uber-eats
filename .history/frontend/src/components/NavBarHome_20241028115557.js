@@ -7,7 +7,7 @@ import {
 } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import Logout from '../components/Logout';
-import CartContext from '../contexts/CartContext';
+import CartContext from './contexts/CartContext';
 import CartModal from '../components/CartModal';
 
 const NavBarHome = () => {

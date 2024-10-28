@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Logout from '../components/Logout';
 import CartContext from '../contexts/CartContext';
 import CartModal from '../components/CartModal';
+import { PiSecurityCameraThin } from 'react-icons/pi';
 
 const NavBarHome = () => {
     const navigate = useNavigate();
@@ -134,7 +135,7 @@ const NavBarHome = () => {
                         <div className="cart-container">
                             <button className="view-cart-button" onClick={() => setIsCartOpen(true)}>
                                 <FaShoppingCart className="shopping-cart-icon" />
-                                View Cart ({totalItems})
+                                View Cart ({cart.reduce((acc, item) => acc + item.quantity, 0)})
                             </button>
                         </div>
                     )}

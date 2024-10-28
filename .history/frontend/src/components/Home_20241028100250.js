@@ -15,8 +15,8 @@ const Home = () => {
       .then(response => {
         console.log("API Response:", response.data);
 
-        // Filter out restaurants with the name "adminr"
-        const filteredRestaurants = response.data.filter(item => item.restaurant.restaurant_name.toLowerCase() !== 'adminr');
+        // Filter restaurants to only include those with user_type "restaurant"
+        const filteredRestaurants = response.data.filter(item => item.restaurant.user_type === 'restaurant');
 
         setRestaurants(filteredRestaurants);
       })

@@ -21,7 +21,7 @@ const NavBarHome = () => {
     const [selectedLocation, setSelectedLocation] = useState('San Jose State University');
     const [activeButton, setActiveButton] = useState('delivery');
 
-    const { cart } = useContext(CartContext); // Access the cart from context
+    const { cart, addToCart, incrementItem, decrementItem } = useContext(CartContext);
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
     const handleLocationChange = (event) => {
@@ -80,7 +80,6 @@ const NavBarHome = () => {
 
     return (
         <>
-            {/* Navbar */}
             <nav className="navbar">
                 <div className="navbar-left">
                     <button className="menu-button" onClick={toggleMenu}>
@@ -143,7 +142,12 @@ const NavBarHome = () => {
 
             {/* Cart Modal */}
             {isCartOpen && (
-                <CartModal cart={cart} setCart={() => {}} onClose={() => setIsCartOpen(false)} />
+                <CartModal
+                    cart={cart}
+                    incrementItem={incrementItem}
+                    decrementItem={decrementItem}
+                    onClose={() => setIsCartOpen(false)}
+                />
             )}
         </>
     );

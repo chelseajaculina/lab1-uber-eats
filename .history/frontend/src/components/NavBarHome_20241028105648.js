@@ -109,44 +109,4 @@ const NavBarHome = () => {
                     <div className="location">
                         <FaMapMarkerAlt />
                         <select
-                            value={selectedLocation}
-                            onChange={handleLocationChange}
-                            className="location-dropdown"
-                        >
-                            <option value="San Jose State University">San Jose State University</option>
-                            <option value="San Francisco">San Francisco</option>
-                            <option value="Los Angeles">Los Angeles</option>
-                            <option value="New York">New York</option>
-                            <option value="Chicago">Chicago</option>
-                        </select>
-                    </div>
-                    <div className="search-box">
-                        <FaSearch />
-                        <input type="text" placeholder="Search Uber Eats" />
-                    </div>
-                    {!isLoggedIn && (
-                        <>
-                            <button className="login-button" onClick={handleLoginClick}>Log in</button>
-                            <button className="signup-button" onClick={handleSignUpClick}>Sign up</button>
-                        </>
-                    )}
-                    {isLoggedIn && (
-                        <div className="cart-container">
-                            <button className="view-cart-button" onClick={() => setIsCartOpen(true)}>
-                                <FaShoppingCart className="shopping-cart-icon" />
-                                View Cart ({totalItems})
-                            </button>
-                        </div>
-                    )}
-                </div>
-            </nav>
-
-            {/* Cart Modal */}
-            {isCartOpen && (
-                <CartModal cart={cart} setCart={() => {}} onClose={() => setIsCartOpen(false)} />
-            )}
-        </>
-    );
-};
-
-export default NavBarHome;
+                            value={selected

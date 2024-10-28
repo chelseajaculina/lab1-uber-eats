@@ -8,21 +8,21 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import Logout from '../components/Logout';
 import CartContext from '../contexts/CartContext';
-import CartModal from '../components/CartModal';
+import CartModal from '../components/CartModal'; // Import the CartModal component
 
 const NavBarHome = () => {
     const navigate = useNavigate();
     const mediaBaseURL = 'http://127.0.0.1:8000/media/';
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isCartOpen, setIsCartOpen] = useState(false);
+    const [isCartOpen, setIsCartOpen] = useState(false); // State to control CartModal visibility
     const [name, setName] = useState('');
     const [profilePicture, setProfilePicture] = useState(localStorage.getItem("profilePicture") || "");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState('San Jose State University');
     const [activeButton, setActiveButton] = useState('delivery');
 
-    const { cart } = useContext(CartContext); // Access the cart from context
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const { cart, setCart } = useContext(CartContext); // Access the cart context
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0); // Calculate total items
 
     const handleLocationChange = (event) => {
         setSelectedLocation(event.target.value);
@@ -142,8 +142,55 @@ const NavBarHome = () => {
             </nav>
 
             {/* Cart Modal */}
+
+            <button className="view-cart-button" onClick={() => setIsCartOpen(true)}>
+                View Cart ({cart.reduce((acc, item) => acc + item.quantity, 0)})
+            </button>
+
+            {/* Cart Modal */}
+            {isCartOpen && <CartModal cart={cart} setCart={setCart} onClose={() => setIsCartOpen(false)} />}
+                
             {isCartOpen && (
-                <CartModal cart={cart} setCart={() => {}} onClose={() => setIsCartOpen(false)} />
+                <CartModal cart={cart} setCart={setCart} onClose={() => setIsCartOpen(false)} />
+            )}
+
+            {isMenuOpen && (
+                <div className="side-menu">
+                    <button className="close-button" onClick={toggleMenu}>✖</button>
+                    {isLoggedIn ? (
+                        <>
+                            <div className="user-info">
+                                <img src={profilePicture} alt="User Profile" className="user-profile-pic" />
+                                <h3>{name}</h3>
+                                <Link to="/customerprofile" className="manage-account-link" onClick={toggleMenu}>Manage account</Link>
+                            </div>
+                            <div className="side-links">
+                                <Link to="/orders" onClick={toggleMenu}><FaRegBookmark /> Orders</Link>
+                                <Link to="/favorites" onClick={toggleMenu}><FaRegGrinHearts /> Favorites</Link>
+                                {/* Other links */}
+                            </div>
+                            <Logout onLogout={handleLogout} />
+                        </>
+                    ) : (
+                        <>
+                            <button className="signup-side-button" onClick={() => navigate('/signup')}>Sign up</button>
+                            <button className="login-side-button" onClick={() => navigate('/login')}>Log in</button>
+                            <div className="side-links">
+                                <Link to="/business-account" onClick={toggleMenu}>Create a business account</Link>
+                                <Link to="/add-restaurant" onClick={toggleMenu}>Add your restaurant</Link>
+                                <Link to="/signup-to-deliver" onClick={toggleMenu}>Sign up to deliver</Link>
+                            </div>
+                        </>
+                    )}
+                    <div className="download-app">
+                        <img src="/images/uber-eats-logo.jpg" alt="Uber Eats" style={{ width: 'auto', maxWidth: '800px', height: '40px' }} />
+                        <p>There's more to love in the app.</p>
+                        <div className="app-links">
+                            <button><FaApple />iPhone</button>
+                            <button><FaAndroid />Android</button>
+                        </div>
+                    </div>
+                </div>
             )}
         </>
     );

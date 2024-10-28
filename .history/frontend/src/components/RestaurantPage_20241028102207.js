@@ -15,7 +15,6 @@ const RestaurantPage = () => {
 
     const { restaurantName } = useParams();
 
-    // Fetch restaurant data when component mounts
     useEffect(() => {
         const fetchRestaurantData = async () => {
             try {
@@ -41,29 +40,23 @@ const RestaurantPage = () => {
         fetchRestaurantData();
     }, [restaurantName]);
 
-    // Add item to cart or update quantity if it already exists
     const addToCart = (dish) => {
         setCart((prevCart) => {
-            // Check if the item already exists in the cart
             const existingItem = prevCart.find((item) => item.id === dish.id);
             if (existingItem) {
-                // If the item exists, update its quantity
                 return prevCart.map((item) =>
                     item.id === dish.id ? { ...item, quantity: item.quantity + 1 } : item
                 );
             } else {
-                // If the item doesn't exist, add it to the cart with a quantity of 1
                 return [...prevCart, { ...dish, quantity: 1 }];
             }
         });
     };
 
-    // Save updated cart to localStorage whenever it changes
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cart));
     }, [cart]);
 
-    // Handle loading and error states
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
     if (!restaurant) return <div>No restaurant data found</div>;
@@ -103,12 +96,10 @@ const RestaurantPage = () => {
                 ))}
             </div>
 
-            {/* View Cart Button */}
             <button className="view-cart-button" onClick={() => setIsCartOpen(true)}>
                 View Cart ({cart.reduce((acc, item) => acc + item.quantity, 0)})
             </button>
 
-            {/* Cart Modal */}
             {isCartOpen && <CartModal cart={cart} setCart={setCart} onClose={() => setIsCartOpen(false)} />}
         </div>
     );

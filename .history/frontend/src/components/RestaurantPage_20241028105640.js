@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './RestaurantPage.css';
 import NavBarHome from './NavBarHome';
 import CartModal from './CartModal';
+import CartContext from '../contexts/CartContext';
 
 const RestaurantPage = () => {
     const [restaurant, setRestaurant] = useState(null);
     const [dishes, setDishes] = useState([]);
-    const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')) || []); 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isCartOpen, setIsCartOpen] = useState(false);
 
     const { restaurantName } = useParams();
+    const { addToCart } = useContext(CartContext); // Use addToCart from context
 
     // Fetch restaurant data when component mounts
     useEffect(() => {
@@ -40,28 +41,6 @@ const RestaurantPage = () => {
 
         fetchRestaurantData();
     }, [restaurantName]);
-
-    // Add item to cart or update quantity if it already exists
-    const addToCart = (dish) => {
-        setCart((prevCart) => {
-            // Check if the item already exists in the cart
-            const existingItem = prevCart.find((item) => item.id === dish.id);
-            if (existingItem) {
-                // If the item exists, update its quantity
-                return prevCart.map((item) =>
-                    item.id === dish.id ? { ...item, quantity: item.quantity + 1 } : item
-                );
-            } else {
-                // If the item doesn't exist, add it to the cart with a quantity of 1
-                return [...prevCart, { ...dish, quantity: 1 }];
-            }
-        });
-    };
-
-    // Save updated cart to localStorage whenever it changes
-    useEffect(() => {
-        localStorage.setItem('cart', JSON.stringify(cart));
-    }, [cart]);
 
     // Handle loading and error states
     if (loading) return <div>Loading...</div>;
@@ -109,7 +88,7 @@ const RestaurantPage = () => {
             </button>
 
             {/* Cart Modal */}
-            {isCartOpen && <CartModal cart={cart} setCart={setCart} onClose={() => setIsCartOpen(false)} />}
+            {isCartOpen && <CartModal cart={cart} setCart={() => {}} onClose={() => setIsCartOpen(false)} />}
         </div>
     );
 };

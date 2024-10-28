@@ -14,11 +14,7 @@ const Home = () => {
     axios.get('http://localhost:8000/api/restaurants/restaurants/list/')
       .then(response => {
         console.log("API Response:", response.data);
-
-        // Filter out restaurants with the name "adminr"
-        const filteredRestaurants = response.data.filter(item => item.restaurant.restaurant_name.toLowerCase() !== 'adminr');
-
-        setRestaurants(filteredRestaurants);
+        setRestaurants(response.data);
       })
       .catch(error => {
         console.error("Error fetching restaurants:", error);

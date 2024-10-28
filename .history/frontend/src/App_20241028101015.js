@@ -20,7 +20,6 @@ import PandaExpress from './components/brands/PandaExpress';
 import RestaurantMenu from './components/RestaurantMenu';
 import RestaurantPage from './components/RestaurantPage';
 import RestaurantList from './components/RestaurantList';
-// import CartComponent from './components/CartComponent';
 
 const App = () => {
 
@@ -61,10 +60,8 @@ const App = () => {
 
                     {/* Example for static brand page */}
                     <Route path="/brands/panda-express" element={<PandaExpress />} />
-
-                    {/* <Route path="/" element={<Home />} /> */}
-                    {/* <Route path="/cart" element={<CartComponent />} /> */}
                 </Routes>
+                
             </MainLayout>
         </Router>
     );

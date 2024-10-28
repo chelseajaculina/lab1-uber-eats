@@ -62,8 +62,8 @@ const App = () => {
                     {/* Example for static brand page */}
                     <Route path="/brands/panda-express" element={<PandaExpress />} />
 
-                    {/* <Route path="/" element={<Home />} /> */}
-                    {/* <Route path="/cart" element={<CartComponent />} /> */}
+                    <Route path="/" element={<Home />} />
+                    <Route path="/cart" element={<CartComponent />} />
                 </Routes>
             </MainLayout>
         </Router>

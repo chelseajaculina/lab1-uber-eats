@@ -15,6 +15,12 @@ urlpatterns = [
 
     path('logout/', LogoutView.as_view(), name='logout'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+<<<<<<< HEAD
+    path('user-dashboard-brands/', RestaurantListView.as_view(), name='user-dashboard-brands'),
+    path('menu/<str:restaurant_name>/', MenuItemListView.as_view(), name='restaurant-menu'),
+    path('favorites/', ToggleFavoriteView.as_view(), name='toggle_favorite'),
+=======
 
 
+>>>>>>> 0441af9a52ddedcf3b2a09419bdbdce59a80a51e
 ]

@@ -13,6 +13,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from datetime import timedelta
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()  # Add this line to load .env file if you're using python-dotenv
+
 
 
 # CORS_ALLOWED_ORIGINS is defined later in the file

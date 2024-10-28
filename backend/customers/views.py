@@ -14,8 +14,6 @@ from rest_framework import permissions, status
 from django.conf import settings
 
 
-
-
 # api view for signup 
 class CustomerSignUpView(generics.CreateAPIView):
     queryset = Customer.objects.all()
@@ -100,6 +98,12 @@ class CustomerProfileView(APIView):
     serializer_class = CustomerSerializer
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]  # Ensure the view can handle multipart form data
+
+    def get(self, request):
+        if isinstance(request.user, Customer):
+            serializer = CustomerSerializer(request.user)
+            return Response(serializer.data)
+        return Response({'error': 'No customer data available'}, status=status.HTTP_404_NOT_FOUND)
 
     def patch(self, request):
         try:

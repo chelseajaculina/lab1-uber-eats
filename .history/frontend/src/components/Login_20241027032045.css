@@ -1,0 +1,102 @@
+/* Container for the entire login page */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    background-color: #ffffff;
+}
+
+/* Title for the login section */
+.login-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+/* Flex container to hold both forms side by side */
+.login-forms {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    max-width: 800px; /* Decrease max-width for a smaller form container */
+    gap: 20px;
+}
+
+/* Styling for each individual form */
+.form-container {
+    flex: 1;
+    background-color: white;
+    padding: 15px; /* Reduce padding to make it smaller */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 300px; /* Add max-width to control form size */
+}
+
+/* Form titles */
+.form-container h2 {
+    margin-bottom: 15px; /* Adjust margin for better spacing */
+    font-size: 18px;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .login-forms {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-container {
+        width: 100%;
+        max-width: 90%; /* Adjust width on small screens */
+        margin-bottom: 20px;
+    }
+}
+
+/* Adjust navbar height */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 2rem;
+    background-color: transparent;
+}
+
+/* Style the brand title to ensure visibility in the taller navbar */
+.brand-title {
+    font-weight: bold;
+    font-size: 1.8rem;
+    color: #000;
+}
+
+/* Optional: If you want to adjust the font size of the Uber Eats logo */
+.brand-title span {
+    font-size: 1.8rem;
+    color: #00cc66;
+}
+
+/* Dropdown Selector Styling */
+.form-selector {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.form-select-dropdown {
+    padding: 8px; /* Slightly reduce padding */
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+/* Login Title */
+.login-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Login Form Container */
+.login-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -19,6 +19,15 @@ from dotenv import load_dotenv
 load_dotenv()  # Add this line to load .env file if you're using python-dotenv
 
 
+
+# CORS_ALLOWED_ORIGINS is defined later in the file
+
+AUTH_USER_MODEL = 'customers.Customer'
+#AUTH_USER_MODEL = 'restaurants.Restaurant'
+# settings.py
+#AUTH_USER_MODEL = 'accounts.User'
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -88,6 +97,7 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
+<<<<<<< HEAD
 
 # CORS_ALLOWED_ORIGINS is defined later in the file
 # Conditional AUTH_USER_MODEL for Customer and Restaurant
@@ -103,7 +113,11 @@ else:
 # settings.py
 #AUTH_USER_MODEL = 'accounts.User'
 
+=======
+>>>>>>> 0441af9a52ddedcf3b2a09419bdbdce59a80a51e
 AUTHENTICATION_BACKENDS = [
+    'customers.custom_auth_backend.CustomUserBackend',  # Replace 'yourapp' with your actual app name
+
     'django.contrib.auth.backends.ModelBackend',
 ]
 

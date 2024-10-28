@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 from django.urls import path
 from .views import UserProfileView, CustomerSignUpView, LogoutView, CustomerProfileView, UploadProfilePictureView, GetCustomerDataView, GetProfilePictureView, CustomerLoginView, TokenRefreshView,RestaurantListView, MenuItemListView
 from .views import ToggleFavoriteView
+=======
+from django.urls import path, include
+from .views import UserProfileView, CustomerSignUpView, LogoutView, CustomerProfileView, UploadProfilePictureView, GetCustomerDataView, GetProfilePictureView, CustomerLoginView, TokenRefreshView
+>>>>>>> 0441af9a52ddedcf3b2a09419bdbdce59a80a51e
 
 urlpatterns = [
     path('signup/', CustomerSignUpView.as_view(), name='customer-signup'),
@@ -12,11 +17,16 @@ urlpatterns = [
     path('upload-profile-picture/', UploadProfilePictureView.as_view(), name='upload-profile-picture'),
     
     path('profile-picture/', GetProfilePictureView.as_view(), name='get-profile-picture'),
-    path('api/user-profile/', UserProfileView.as_view(), name='user-profile'),
+    path('user-profile/', UserProfileView.as_view(), name='user-profile'),
 
     path('logout/', LogoutView.as_view(), name='logout'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+<<<<<<< HEAD
     path('user-dashboard-brands/', RestaurantListView.as_view(), name='user-dashboard-brands'),
     path('menu/<str:restaurant_name>/', MenuItemListView.as_view(), name='restaurant-menu'),
     path('favorites/', ToggleFavoriteView.as_view(), name='toggle_favorite'),
+=======
+
+
+>>>>>>> 0441af9a52ddedcf3b2a09419bdbdce59a80a51e
 ]

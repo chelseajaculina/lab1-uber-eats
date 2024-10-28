@@ -1,0 +1,101 @@
+/* Main container for the login form */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    background-color: #ffffff;
+}
+
+/* Inner container to restrict form width and height */
+.login-box {
+    width: 100%;
+    max-width: 400px; /* Set a maximum width */
+    padding: 30px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Title styling */
+.login-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+/* Input styling */
+.login-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    background-color: #f2f2f2;
+}
+
+/* Continue button styling */
+.continue-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+/* Divider styling */
+.divider {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 20px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.divider .line {
+    flex-grow: 1;
+    height: 1px;
+    background-color: #ddd;
+}
+
+.divider span {
+    margin: 0 10px;
+}
+
+/* Social login buttons styling */
+.social-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #333;
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.social-button .icon {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+/* Disclaimer text styling */
+.disclaimer {
+    font-size: 10px;
+    color: #666;
+    text-align: center;
+    margin-top: 15px;
+    line-height: 1.5;
+}

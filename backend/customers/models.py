@@ -23,6 +23,7 @@ class Customer(AbstractUser):
     phone = models.CharField(max_length=15, null=True, blank=True)
     profile_picture = models.ImageField(upload_to=upload_path, null=True, blank=True)
     favorites = models.TextField(null=True, blank=True)  # Assuming favorites is a text field
+  
 
     # Fields required by AbstractUser
     REQUIRED_FIELDS = ['email']

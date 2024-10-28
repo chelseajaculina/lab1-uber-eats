@@ -1,0 +1,176 @@
+/* General styling for the restaurant page */
+.restaurant-page {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9; /* Light background for contrast */
+}
+
+/* Restaurant Header Section */
+.restaurant-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.restaurant-logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+}
+
+.restaurant-details {
+    max-width: 600px;
+}
+
+.restaurant-details h1 {
+    font-size: 2rem;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.restaurant-details p {
+    margin: 5px 0;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* Dishes Section */
+.dish-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Slightly wider columns */
+    gap: 20px; /* Increased spacing between grid items for better spacing */
+    margin-top: 20px;
+}
+
+/* Individual Dish Card */
+.dish-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dish-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); /* Slightly deeper shadow on hover */
+}
+
+.dish-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.dish-card h3 {
+    font-size: 1.2rem;
+    margin: 10px 0 5px;
+    color: #333;
+}
+
+.dish-card p {
+    color: #666;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.dish-card strong {
+    color: #333;
+    font-size: 1.1rem;
+    display: block;
+    margin-top: 5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .restaurant-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .restaurant-logo {
+        margin-bottom: 15px;
+    }
+
+    .restaurant-details {
+        max-width: 100%;
+    }
+}
+/* Dish Card */
+.dish-card {
+    position: relative;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.dish-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Dish Image */
+.dish-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* Add to Cart Button */
+.add-to-cart-button {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: #28a745; /* Green color for the button */
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-to-cart-button:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+
+/* Favorite Button */
+.favorite-button {
+    padding: 8px 16px;
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+    cursor: pointer;
+    color: #555;
+    transition: color 0.3s, background-color 0.3s;
+}
+
+.favorite-button.favorite {
+    color: #28a745; /* Green color for favorite */
+    background-color: #e6f4ea; /* Light green background to indicate active favorite status */
+}
+
+.favorite-button:hover {
+    color: #28a745;
+    background-color: #d4edda; /* Slightly darker green background on hover */
+}
+

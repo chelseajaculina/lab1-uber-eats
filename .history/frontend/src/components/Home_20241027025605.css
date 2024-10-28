@@ -1,0 +1,350 @@
+.home-container {
+  width: 100%;
+  padding: 1rem;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Navigation Bar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #fff;
+}
+
+.navbar-left,
+.navbar-center,
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.menu-button {
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.brand-title {
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-left: 1rem;
+  text-decoration: none;
+  color: #000;
+}
+
+.navbar-center .delivery-button,
+.navbar-center .pickup-button {
+  margin: 0 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #f7f7f7;
+  border: none;
+  cursor: pointer;
+}
+
+.location-info {
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  margin-right: 1rem;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.login-button,
+.signup-button {
+  margin-left: 1rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  text-decoration: none;
+}
+
+.signup-button {
+  background-color: #000;
+  color: #fff;
+}
+
+.login-button {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #000;
+}
+
+/* Promotions */
+.promotions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 2rem;
+}
+
+.promotion-card {
+  width: 30%;
+  background-color: #f7f7f7;
+  padding: 1.5rem;
+  border-radius: 10px;
+}
+
+.promotion-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* Categories */
+.categories {
+  display: flex;
+  overflow-x: scroll;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.category-item {
+  text-align: center;
+}
+
+/* National Brands */
+.brands-section {
+  padding: 1rem;
+}
+
+.brands {
+  display: flex;
+  gap: 1rem;
+}
+
+.brand-card {
+  width: 20%;
+  background-color: #f7f7f7;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.brand-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.brand-card h3 {
+  margin-top: 0.5rem;
+  font-size: 1.25rem;
+}
+
+
+/* Home.css */
+
+.home-container {
+  padding: 20px;
+}
+
+/* Horizontal scrolling for categories */
+.categories-scroll {
+  display: flex;
+  overflow-x: auto;
+  padding: 10px 0;
+  gap: 20px; /* Adjust spacing between items */
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column; /* Stack icon and text vertically */
+  align-items: center; /* Center the icon and text horizontally */
+  text-align: center;
+  width: 80px; /* Adjust width as needed for consistency */
+}
+
+.category-item img {
+  width: 50px; /* Adjust size of the icon */
+  height: auto;
+  margin-bottom: 5px; /* Space between icon and text */
+}
+
+.category-item span {
+  font-size: 14px; /* Adjust font size if needed */
+  color: #333; /* Adjust color for readability */
+}
+
+/* Promotions Section */
+.promotions-section {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 20px 0;
+}
+
+.promotion-card {
+  background-color: #f9f9f9;
+  padding: 20px;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  text-align: center;
+  width: 250px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.promotion-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+
+/* Brands Section */
+.brands-section {
+  margin-top: 30px;
+}
+
+.brands-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+}
+
+.brand-card {
+  flex: 0 0 auto;
+  width: 200px;
+  text-align: center;
+}
+
+.brand-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* Home.css */
+
+.favorite-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  color: #e0245e; /* Set color for heart icon (red) */
+  font-size: 24px;
+}
+
+.brand-card {
+  position: relative; /* Required for positioning favorite icon inside the card */
+  flex: 0 0 auto;
+  width: 200px;
+  text-align: center;
+}
+
+.home-container {
+  padding: 20px;
+}
+
+.promotions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.promotion-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  text-align: center;
+  width: 250px;
+}
+
+.promotion-button {
+  background-color: #00cc66;
+  border: none;
+  color: #fff;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.brands-section {
+  margin-top: 40px;
+}
+
+.brands {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 10px;
+}
+
+.brand-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  text-align: center;
+  min-width: 200px;
+  flex-shrink: 0;
+}
+
+.restaurant-image {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.rating {
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+
+.home-container {
+  padding: 20px;
+}
+
+.restaurants-section {
+  margin-top: 20px;
+}
+
+.restaurants-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.restaurant-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.restaurant-logo {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.restaurant-details h1 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.restaurant-details p {
+  margin: 5px 0;
+}

@@ -1,27 +1,24 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-# from accounts.models import User
+from django.contrib.auth.models import AbstractUser, User
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
 
 # def upload_path(instance, filename):
-#     # Extract the file extension
-#     extension = filename.split('.')[-1]
-    
-#     # Format the new filename with the user's username and original extension
-#     new_filename = f"{instance.username}_logo.{extension}"
-    
-#     # Define the full path to save the file
-#     return '/'.join(['profile_pictures', str(instance.username), new_filename])
+#     # This function can dynamically create a directory based on the instance properties
+#     return f'profile_pictures/{instance.restaurant_name}/{filename}'
+
 
 def upload_path(instance, filename):
-    return f'profile_pictures/{instance.username}/{filename}'
+    # Access restaurant's restaurant_name from the related Restaurant instance
+    
+    return f'profile_pictures/{instance.restaurant.restaurant_name}/{filename}'
+
 
 # Extend Django's built-in AbstractUser model for restaurant-specific fields
 class Restaurant(AbstractUser):
-    # user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='restaurant_profile', null = True)
+    #user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='restaurant_profile', null = True)
     restaurant_name = models.CharField(max_length=100, unique=True)
     location = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
@@ -63,6 +60,16 @@ class Restaurant(AbstractUser):
         help_text='Specific permissions for this restaurant.',
         verbose_name='user permissions'
     )
+
+    def save(self, *args, **kwargs):
+        # Convert restaurant_name to lowercase before saving to the database
+        self.restaurant_name = self.restaurant_name.lower()
+        super(Restaurant, self).save(*args, **kwargs)
+
+# class RestaurantImage(models.Model):
+#     restaurant = models.ForeignKey(Restaurant, related_name='images', on_delete=models.CASCADE)
+#     image = models.ImageField(upload_to='restaurant_images/')
+#     uploaded_at = models.DateTimeField(auto_now_add=True)
 
 # Dish Model to store information about the restaurant's dishes
 class Dish(models.Model):
@@ -113,5 +120,4 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order {self.id} - {self.customer} at {self.restaurant.restaurant_name}"
-
 

@@ -13,7 +13,7 @@ const RestaurantList = () => {
                 setLoading(true);
                 setError(null);
 
-                const response = await axios.get('http://localhost:8000/api/restaurants');
+                const response = await axios.get('http://localhost:8000/api/restaurants/dishes/');
                 
                 // Filter out any restaurant entries where the name is "adminr" or any other unwanted names
                 const filteredRestaurants = response.data.filter(restaurant => restaurant.name.toLowerCase() !== 'adminr');

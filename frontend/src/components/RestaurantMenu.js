@@ -29,7 +29,7 @@ const RestaurantMenu = () => {
   const fetchDishes = async () => {
     try {
       const token = localStorage.getItem('access_token');
-      const response = await axios.get('http://localhost:8000/api/restaurants/dishes/', {
+      const response = await axios.get('http://localhost:8000/api/restaurants/restaurants/dishes/', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -134,7 +134,7 @@ const handleImageChange = (e) => {
         setSuccessMessage('Dish updated successfully!');
       } else {
         // Add a new dish with POST request
-        await axios.post('http://localhost:8000/api/restaurants/dishes/', formData, {
+        await axios.post('http://localhost:8000/api/restaurants/restaurants/dishes/', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}`,

@@ -130,14 +130,7 @@ const NavBarHome = () => {
                             <button className="signup-button" onClick={handleSignUpClick}>Sign up</button>
                         </>
                     )}
-                    {isLoggedIn && (
-                        <div className="cart-container">
-                            <button className="view-cart-button" onClick={() => setIsCartOpen(true)}>
-                                <FaShoppingCart className="shopping-cart-icon" />
-                                View Cart ({totalItems})
-                            </button>
-                        </div>
-                    )}
+                    
                 </div>
             </nav>
             {/* Side Menu - Shown when menu is open, different content if logged in */}

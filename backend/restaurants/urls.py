@@ -38,7 +38,7 @@ urlpatterns = [
     path('restaurants/list/', RestaurantListView.as_view(), name='restaurant-list'),
 
     # Dish management
-    path('dishes/', DishListCreateView.as_view(), name='dish-list-create'),
+    path('restaurants/dishes/', DishListCreateView.as_view(), name='dish-list-create'),
     path('dishes/<int:dish_id>/', DishDetailView.as_view(), name='dish-detail'),
 
     # JWT token refresh

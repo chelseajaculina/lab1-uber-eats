@@ -129,7 +129,7 @@ const RestaurantPage = () => {
                     </div>
                 ))}
             </div>
-
+{/* 
             <button
     className="view-cart-button"
     onClick={() => setIsCartOpen(true)}
@@ -160,7 +160,7 @@ const RestaurantPage = () => {
         />
     </svg>
     View Cart ({cart.reduce((acc, item) => acc + item.quantity, 0)})
-</button>
+</button> */}
 
             {isCartOpen && <CartModal cart={cart} setCart={setCart} onClose={() => setIsCartOpen(false)} />}
         </div>

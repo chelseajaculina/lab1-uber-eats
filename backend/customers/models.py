@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from restaurants.models import Restaurant  # Import the Restaurant model
 
 def upload_path(instance, filename):
     # Extract the file extension
@@ -13,6 +14,7 @@ def upload_path(instance, filename):
 
 class Customer(AbstractUser):
     # Custom fields for the Customer model
+    
     name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     date_of_birth = models.DateField(null=True, blank=True)
@@ -22,7 +24,7 @@ class Customer(AbstractUser):
     nickname = models.CharField(max_length=100, null=True, blank=True)
     phone = models.CharField(max_length=15, null=True, blank=True)
     profile_picture = models.ImageField(upload_to=upload_path, null=True, blank=True)
-    favorites = models.TextField(null=True, blank=True)  # Assuming favorites is a text field
+    favorites = models.ManyToManyField(Restaurant, blank=True, related_name="favorited_by")
   
 
     # Fields required by AbstractUser
